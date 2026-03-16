@@ -1,0 +1,33 @@
+{% extends 'admin_base.html' %}
+
+{% block content %}
+
+<h4>Student Complaints</h4>
+
+<div class="dashboard-card">
+
+<table class="table">
+
+<tr>
+<th>Student</th>
+<th>Complaint</th>
+<th>Status</th>
+</tr>
+
+{% for c in complaints %}
+
+<tr>
+
+<td>{{ c.student.user.get_full_name }}</td>
+<td>{{ c.message }}</td>
+<td>{{ c.status }}</td>
+
+</tr>
+
+{% endfor %}
+
+</table>
+
+</div>
+
+{% endblock %}

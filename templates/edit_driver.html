@@ -1,0 +1,51 @@
+{% extends 'admin_base.html' %}
+
+{% block content %}
+
+<h4>Edit Driver</h4>
+
+<div class="dashboard-card">
+
+<form method="POST">
+{% csrf_token %}
+
+<div class="mb-3">
+<label>Phone</label>
+
+<input type="text"
+name="phone"
+value="{{ driver.phone }}"
+class="form-control">
+
+</div>
+
+<div class="mb-3">
+
+<label>Assigned Bus</label>
+
+<select name="bus" class="form-control">
+
+{% for bus in buses %}
+
+<option value="{{ bus.id }}"
+{% if bus.id == driver.assigned_bus.id %}selected{% endif %}>
+
+{{ bus.bus_number }}
+
+</option>
+
+{% endfor %}
+
+</select>
+
+</div>
+
+<button class="btn btn-primary">
+Update Driver
+</button>
+
+</form>
+
+</div>
+
+{% endblock %}

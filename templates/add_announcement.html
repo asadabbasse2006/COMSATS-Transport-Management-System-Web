@@ -1,0 +1,35 @@
+{% extends 'admin_base.html' %}
+
+{% block content %}
+
+<h4>Add Announcement</h4>
+
+<div class="dashboard-card">
+
+<form method="POST">
+{% csrf_token %}
+
+<div class="mb-3">
+
+<label>Title</label>
+<input type="text" name="title" class="form-control">
+
+</div>
+
+<div class="mb-3">
+
+<label>Description</label>
+
+<textarea name="description" class="form-control"></textarea>
+
+</div>
+
+<button class="btn btn-success">
+Post Announcement
+</button>
+
+</form>
+
+</div>
+
+{% endblock %}

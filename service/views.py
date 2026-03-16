@@ -152,10 +152,109 @@ def driver_dashboard(request):
 
     return render(request, "driver_dashboard.html", context)
 def admin_dashboard(request):
-    return HttpResponse("Admin Dashboard")
+
+    students = Student.objects.all()
+    drivers = Driver.objects.all()
+    buses = Bus.objects.all()
+    routes = Route.objects.all()
+    complaints = Complaint.objects.all().order_by('complaint_date')[:5]
+    context = {
+        "students":students,
+        "drivers":drivers,
+        "buses":buses,
+        "routes":routes,
+        "complaints":complaints
+    }
+
+    return render(request,"admin_dashboard.html",context)
+
+def admin_students(request):
+    students = Student.objects.all()
+    return render(request, "admin_students.html", {"students": students})
+
+
+def admin_drivers(request):
+    drivers = Driver.objects.all()
+    return render(request, "admin_drivers.html", {"drivers": drivers})
+
+
+def admin_buses(request):
+    buses = Bus.objects.all()
+    return render(request, "admin_buses.html", {"buses": buses})
+
+
+def admin_routes(request):
+    routes = Route.objects.all()
+    return render(request, "admin_routes.html", {"routes": routes})
+
+
+def admin_attendance(request):
+    attendance = Attendance.objects.all()
+    return render(request, "admin_attendance.html", {"attendance": attendance})
+
+
+def admin_complaints(request):
+    complaints = Complaint.objects.all()
+    return render(request, "admin_complaints.html", {"complaints": complaints})
+
+
+def admin_announcement(request):
+    announcements = Announcement.objects.all()
+    return render(request, "admin_announcements.html", {"announcements": announcements})
+
+def edit_student(request, id):
+
+    student = Student.objects.get(id=id)
+
+    if request.method == "POST":
+
+        student.reg_number = request.POST.get("reg")
+
+        route = request.POST.get("route")
+        student.route = Route.objects.get(id=route)
+
+        student.save()
+
+        return redirect("admin_students")
+
+    routes = Route.objects.all()
+
+    context = {
+        "student": student,
+        "routes": routes
+    }
+
+    return render(request, "edit_student.html", context)
+
+def add_student(request):
+
+    if request.method == "POST":
+
+        name = request.POST.get("name")
+        reg = request.POST.get("reg")
+        route = request.POST.get("route")
+
+        route_obj = Route.objects.get(id=route)
+
+        Student.objects.create(
+            reg_number=reg,
+            route=route_obj
+        )
+
+        return redirect("admin_students")
+
+    routes = Route.objects.all()
+
+    return render(request, "add_student.html", {"routes": routes})
+
+def delete_student(request, id):
+
+    student = Student.objects.get(id=id)
+    student.delete()
+
+    return redirect("admin_students")
 
 from .models import Complaint
-
 def student_dashboard(request):
     profile = AccountProfile.objects.get(user=request.user)
 

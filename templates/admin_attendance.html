@@ -1,0 +1,42 @@
+{% extends 'admin_base.html' %}
+
+{% block content %}
+
+<h4>Attendance</h4>
+
+<div class="dashboard-card">
+
+<table class="table">
+
+<tr>
+<th>Student</th>
+<th>Date</th>
+<th>Status</th>
+</tr>
+
+{% for a in attendance %}
+
+<tr>
+
+<td>{{ a.student.user.get_full_name }}</td>
+<td>{{ a.date }}</td>
+
+<td>
+
+{% if a.is_present %}
+<span class="badge bg-success">Present</span>
+{% else %}
+<span class="badge bg-danger">Absent</span>
+{% endif %}
+
+</td>
+
+</tr>
+
+{% endfor %}
+
+</table>
+
+</div>
+
+{% endblock %}

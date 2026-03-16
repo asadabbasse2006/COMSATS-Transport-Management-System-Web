@@ -1,0 +1,43 @@
+{% extends 'admin_base.html' %}
+
+{% block content %}
+
+<h4>Add Bus</h4>
+
+<div class="dashboard-card">
+
+<form method="POST">
+{% csrf_token %}
+
+<div class="mb-3">
+<label>Bus Number</label>
+<input type="text" name="bus_number" class="form-control">
+</div>
+
+<div class="mb-3">
+<label>Capacity</label>
+<input type="number" name="capacity" class="form-control">
+</div>
+
+<div class="mb-3">
+<label>Route</label>
+
+<select name="route" class="form-control">
+
+{% for route in routes %}
+<option value="{{ route.id }}">{{ route.route_name }}</option>
+{% endfor %}
+
+</select>
+
+</div>
+
+<button class="btn btn-success">
+Add Bus
+</button>
+
+</form>
+
+</div>
+
+{% endblock %}

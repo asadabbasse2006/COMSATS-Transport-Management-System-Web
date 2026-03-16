@@ -1,0 +1,43 @@
+{% extends 'admin_base.html' %}
+
+{% block content %}
+
+<h4>Add Driver</h4>
+
+<div class="dashboard-card">
+
+<form method="POST">
+{% csrf_token %}
+
+<div class="mb-3">
+<label>Driver Name</label>
+<input type="text" name="name" class="form-control">
+</div>
+
+<div class="mb-3">
+<label>Phone</label>
+<input type="text" name="phone" class="form-control">
+</div>
+
+<div class="mb-3">
+<label>Assign Bus</label>
+
+<select name="bus" class="form-control">
+
+{% for bus in buses %}
+<option value="{{ bus.id }}">{{ bus.bus_number }}</option>
+{% endfor %}
+
+</select>
+
+</div>
+
+<button class="btn btn-success">
+Add Driver
+</button>
+
+</form>
+
+</div>
+
+{% endblock %}

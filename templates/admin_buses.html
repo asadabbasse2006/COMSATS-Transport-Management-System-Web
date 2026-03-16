@@ -1,0 +1,33 @@
+{% extends 'admin_base.html' %}
+
+{% block content %}
+
+<h4>Buses</h4>
+
+<div class="dashboard-card">
+
+<table class="table">
+
+<tr>
+<th>Bus Number</th>
+<th>Capacity</th>
+<th>Route</th>
+</tr>
+
+{% for bus in buses %}
+
+<tr>
+
+<td>{{ bus.bus_number }}</td>
+<td>{{ bus.capacity }}</td>
+<td>{{ bus.route }}</td>
+
+</tr>
+
+{% endfor %}
+
+</table>
+
+</div>
+
+{% endblock %}

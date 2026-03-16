@@ -1,0 +1,31 @@
+{% extends 'admin_base.html' %}
+
+{% block content %}
+
+<h4>Announcements</h4>
+
+<div class="dashboard-card">
+
+<table class="table">
+
+<tr>
+<th>Title</th>
+<th>Date</th>
+</tr>
+
+{% for a in announcements %}
+
+<tr>
+
+<td>{{ a.title }}</td>
+<td>{{ a.created_at }}</td>
+
+</tr>
+
+{% endfor %}
+
+</table>
+
+</div>
+
+{% endblock %}

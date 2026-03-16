@@ -1,0 +1,51 @@
+{% extends 'admin_base.html' %}
+
+{% block content %}
+
+<h4>Edit Student</h4>
+
+<div class="dashboard-card">
+
+<form method="POST">
+{% csrf_token %}
+
+<div class="mb-3">
+<label>Registration Number</label>
+
+<input type="text"
+name="reg"
+value="{{ student.reg_number }}"
+class="form-control">
+
+</div>
+
+<div class="mb-3">
+
+<label>Route</label>
+
+<select name="route" class="form-control">
+
+{% for r in routes %}
+
+<option value="{{ r.id }}"
+{% if r.id == student.route.id %}selected{% endif %}>
+
+{{ r.route_name }}
+
+</option>
+
+{% endfor %}
+
+</select>
+
+</div>
+
+<button class="btn btn-primary">
+Update Student
+</button>
+
+</form>
+
+</div>
+
+{% endblock %}

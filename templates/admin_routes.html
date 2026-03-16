@@ -1,0 +1,35 @@
+{% extends 'admin_base.html' %}
+
+{% block content %}
+
+<h4>Routes</h4>
+
+<div class="dashboard-card">
+
+<table class="table">
+
+<tr>
+<th>Route Name</th>
+<th>Start</th>
+<th>End</th>
+<th>Departure</th>
+</tr>
+
+{% for route in routes %}
+
+<tr>
+
+<td>{{ route.route_name }}</td>
+<td>{{ route.start_location }}</td>
+<td>{{ route.end_location }}</td>
+<td>{{ route.departure_time }}</td>
+
+</tr>
+
+{% endfor %}
+
+</table>
+
+</div>
+
+{% endblock %}
