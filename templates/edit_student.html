@@ -10,6 +10,14 @@
 {% csrf_token %}
 
 <div class="mb-3">
+<label>Name</label>
+<input type="text"
+name="name"
+value="{{ student.user.first_name }}"
+class="form-control">
+</div>
+
+<div class="mb-3">
 <label>Registration Number</label>
 
 <input type="text"
@@ -20,7 +28,6 @@ class="form-control">
 </div>
 
 <div class="mb-3">
-
 <label>Route</label>
 
 <select name="route" class="form-control">
@@ -35,6 +42,25 @@ class="form-control">
 </option>
 
 {% endfor %}
+
+</select>
+
+</div>
+
+<div class="mb-3">
+<label>Fee Status</label>
+
+<select name="fee_status" class="form-control">
+
+<option value="Paid"
+{% if student.fee_status == "Paid" %}selected{% endif %}>
+Paid
+</option>
+
+<option value="Unpaid"
+{% if student.fee_status == "Unpaid" %}selected{% endif %}>
+Unpaid
+</option>
 
 </select>
 

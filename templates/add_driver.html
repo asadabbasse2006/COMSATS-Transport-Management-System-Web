@@ -10,22 +10,27 @@
 {% csrf_token %}
 
 <div class="mb-3">
-<label>Driver Name</label>
-<input type="text" name="name" class="form-control">
+<label>License Number</label>
+<input type="text" name="reg" class="form-control">
 </div>
 
 <div class="mb-3">
-<label>Phone</label>
-<input type="text" name="phone" class="form-control">
+<label>Department</label>
+<input type="text" name="department" class="form-control">
 </div>
 
 <div class="mb-3">
-<label>Assign Bus</label>
+<label>Semester</label>
+<input type="number" name="semester" class="form-control">
+</div>
 
-<select name="bus" class="form-control">
+<div class="mb-3">
+<label>Route</label>
 
-{% for bus in buses %}
-<option value="{{ bus.id }}">{{ bus.bus_number }}</option>
+<select name="route" class="form-control">
+
+{% for r in routes %}
+<option value="{{ r.id }}">{{ r.route_name }}</option>
 {% endfor %}
 
 </select>
@@ -33,7 +38,7 @@
 </div>
 
 <button class="btn btn-success">
-Add Driver
+Add Student
 </button>
 
 </form>

@@ -46,6 +46,7 @@ class AccountProfile(models.Model):
     role = models.CharField(max_length=20, choices=ROLE_CHOICES)
     phone_number = models.CharField(max_length=15)
     created_at = models.DateTimeField(auto_now_add=True)
+    otp = models.CharField(max_length=6,blank=True,null=True)
 
     def __str__(self):
         return f"{self.user.username} ({self.role})"
@@ -58,7 +59,7 @@ class Student(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     reg_number = models.CharField(max_length=20, unique=True)
     department = models.CharField(max_length=100)
-    semester = models.IntegerField()
+    semester = models.IntegerField(default=False)
     route = models.ForeignKey(Route, on_delete=models.SET_NULL, null=True)
     transport_card_id = models.CharField(max_length=20, unique=True)
     fee_status = models.CharField(max_length=20)

@@ -11,6 +11,71 @@ from job_portal import settings
 from service.models import Route, AccountProfile, Student,Announcement,Bus,Driver,Attendance
 from service.forms import ProfileEditForm
 
+import random
+
+def generate_otp():
+    return str(random.randint(100000,999999))
+
+def forgot_password(request):
+    if request.method == "POST":
+        email = request.POST.get('email')
+
+        try:
+            user = User.objects.get(email=email)
+            profile = AccountProfile.objects.get(user=user)
+
+            otp = generate_otp()
+            profile.otp = otp
+            profile.save()
+            print(otp)
+            send_mail(
+                "Password Reset OTP",
+                f"Your OTP is: {otp}",
+                "asadse2006@gmail.com",
+                [email],
+                fail_silently=False
+            )
+
+            request.session['reset_email'] = email
+            return redirect('verify_otp')
+
+        except:
+            return render(request,'forgot_password.html',{'error':'Email not found'})
+
+    return render(request,'forgot_password.html')
+
+def verify_otp(request):
+
+    if request.method == "POST":
+        otp = request.POST.get('otp')
+        email = request.session.get('reset_email')
+
+        user = User.objects.get(email=email)
+        profile = AccountProfile.objects.get(user=user)
+
+        if profile.otp == otp:
+            return redirect('new_password')
+
+        else:
+            return render(request,'verify_otp.html',{'error':'Invalid OTP'})
+
+    return render(request,'verify_otp.html')
+
+def new_password(request):
+
+    if request.method == "POST":
+        password = request.POST.get('password')
+        email = request.session.get('reset_email')
+
+        user = User.objects.get(email=email)
+        user.set_password(password)
+        user.save()
+
+        return redirect('login')
+
+    return render(request,'new_password.html')
+
+
 def email(receiver):
     send_mail(
         'Login Alert',
@@ -61,9 +126,6 @@ def login_view(request):
 
             elif role == "driver":
                 return redirect("driver_dashboard")
-
-            elif role == "manager":
-                return redirect('manager_dashboard')
 
             else:
                 return HttpResponseBadRequest("Invalid role")
@@ -210,8 +272,16 @@ def edit_student(request, id):
 
         student.reg_number = request.POST.get("reg")
 
+        # Update name (stored in User model)
+        student.user.first_name = request.POST.get("name")
+        student.user.save()
+
+        # Update route
         route = request.POST.get("route")
         student.route = Route.objects.get(id=route)
+
+        # Update fee status
+        student.fee_status = request.POST.get("fee_status")
 
         student.save()
 
@@ -228,22 +298,32 @@ def edit_student(request, id):
 
 def add_student(request):
 
+    routes = Route.objects.all()
+
     if request.method == "POST":
 
-        name = request.POST.get("name")
         reg = request.POST.get("reg")
-        route = request.POST.get("route")
+        route_id = request.POST.get("route")
 
-        route_obj = Route.objects.get(id=route)
+        route = Route.objects.get(id=route_id)
 
-        Student.objects.create(
-            reg_number=reg,
-            route=route_obj
+        # create user automatically
+        user = User.objects.create_user(
+            username=reg,
+            password="123456"
         )
 
-        return redirect("admin_students")
+        Student.objects.create(
+            user=user,
+            reg_number=reg,
+            department="Unknown",
+            semester=1,
+            route=route,
+            transport_card_id=reg,
+            fee_status="Unpaid"
+        )
 
-    routes = Route.objects.all()
+        return redirect('admin_students')
 
     return render(request, "add_student.html", {"routes": routes})
 
