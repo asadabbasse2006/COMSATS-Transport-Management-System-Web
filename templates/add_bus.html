@@ -11,12 +11,17 @@
 
 <div class="mb-3">
 <label>Bus Number</label>
-<input type="text" name="bus_number" class="form-control">
+<input type="text" name="reg" class="form-control">
 </div>
 
 <div class="mb-3">
-<label>Capacity</label>
-<input type="number" name="capacity" class="form-control">
+<label>Department</label>
+<input type="text" name="department" class="form-control">
+</div>
+
+<div class="mb-3">
+<label>Semester</label>
+<input type="number" name="semester" class="form-control">
 </div>
 
 <div class="mb-3">
@@ -24,8 +29,8 @@
 
 <select name="route" class="form-control">
 
-{% for route in routes %}
-<option value="{{ route.id }}">{{ route.route_name }}</option>
+{% for r in routes %}
+<option value="{{ r.id }}">{{ r.route_name }}</option>
 {% endfor %}
 
 </select>
