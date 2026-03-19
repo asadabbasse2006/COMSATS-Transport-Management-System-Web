@@ -244,6 +244,31 @@ def admin_buses(request):
     buses = Bus.objects.all()
     return render(request, "admin_buses.html", {"buses": buses})
 
+def edit_bus(request, id):
+
+    bus = Bus.objects.get(id=id)
+    routes = Route.objects.all()
+
+    if request.method == "POST":
+
+        bus.bus_number = request.POST.get("bus_no")
+        bus.capacity = request.POST.get("capacity")
+        bus.route = Route.objects.get(id=request.POST.get("route"))
+        bus.is_active = True if request.POST.get("is_active") == "on" else False
+
+        bus.save()
+
+        return redirect('admin_buses')
+
+    return render(request, "edit_bus.html", {
+        "bus": bus,
+        "routes": routes
+    })
+
+def delete_bus(request,id):
+    bus = Bus.objects.get(id=id)
+    bus.delete()
+    return redirect('admin_buses')
 
 def admin_routes(request):
     routes = Route.objects.all()
@@ -326,6 +351,31 @@ def add_student(request):
         return redirect('admin_students')
 
     return render(request, "add_student.html", {"routes": routes})
+
+def add_bus(request):
+
+    routes = Route.objects.all()
+
+    if request.method == "POST":
+
+        bus_no = request.POST.get("bus_no")
+        capacity = request.POST.get("capacity")
+        route_id = request.POST.get("route")
+
+        # checkbox handling
+        is_active = True if request.POST.get("is_active") == "on" else False
+
+        route = Route.objects.get(id=route_id)
+
+        Bus.objects.create(
+            bus_number=bus_no,
+            capacity=capacity,
+            route=route,
+            is_active=is_active
+        )
+
+        return redirect('admin_buses')
+    return render(request, "add_bus.html", {"routes": routes})
 
 def delete_student(request, id):
 

@@ -6,7 +6,7 @@
 <h4>Buses Management</h4>
 
 <a href="{% url 'add_bus' %}" class="btn btn-primary">
-<i class="bi bi-plus-circle"></i> Add Student
+<i class="bi bi-plus-circle"></i> Add Bus
 </a>
 
 </div>
@@ -17,24 +17,23 @@
 
 <thead>
 <tr>
-<th>Name</th>
-<th>Registration</th>
+<th>Bus Number</th>
 <th>Route</th>
-<th>Fee Status</th>
-<th>Actions</th>
+<th>Capacity</th>
+<th>Status</th>
 </tr>
 </thead>
 
 <tbody>
 
-{% for student in students %}
+{% for bus in buses %}
 
 <tr>
 
-<td>{{ student.user.get_full_name }}</td>
-<td>{{ student.reg_number }}</td>
-<td>{{ student.route }}</td>
-<td>{{ student.fee_status }}</td>
+<td>{{ bus.bus_number }}</td>
+<td>{{ bus.route }}</td>
+<td>{{ bus.capacity }}</td>
+<td>{{ bus.is_active }}</td>
 
 <td>
 

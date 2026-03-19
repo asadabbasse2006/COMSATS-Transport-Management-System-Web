@@ -11,30 +11,29 @@
 
 <div class="mb-3">
 <label>Bus Number</label>
-<input type="text" name="reg" class="form-control">
+<input type="text" name="bus_no" class="form-control">
 </div>
 
 <div class="mb-3">
-<label>Department</label>
-<input type="text" name="department" class="form-control">
-</div>
-
-<div class="mb-3">
-<label>Semester</label>
-<input type="number" name="semester" class="form-control">
+<label>Capacity</label>
+<input type="number" name="capacity" class="form-control">
 </div>
 
 <div class="mb-3">
 <label>Route</label>
 
 <select name="route" class="form-control">
-
 {% for r in routes %}
 <option value="{{ r.id }}">{{ r.route_name }}</option>
 {% endfor %}
-
 </select>
 
+</div>
+
+<div class="mb-3">
+<label>
+<input type="checkbox" name="is_active"> Active
+</label>
 </div>
 
 <button class="btn btn-success">
