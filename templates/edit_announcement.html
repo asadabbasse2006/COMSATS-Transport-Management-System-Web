@@ -1,0 +1,78 @@
+{% extends 'admin_base.html' %}
+
+{% block content %}
+
+<h4>Edit Announcement</h4>
+
+<div class="dashboard-card">
+
+<form method="POST">
+{% csrf_token %}
+
+<!-- Title -->
+<div class="mb-3">
+<label>Title</label>
+<input type="text" name="title"
+value="{{ announcement.title }}"
+class="form-control" required>
+</div>
+
+<!-- Description -->
+<div class="mb-3">
+<label>Description</label>
+<textarea name="message" class="form-control" rows="4" required>
+{{ announcement.message }}
+</textarea>
+</div>
+
+<!-- Audience -->
+<div class="mb-3">
+<label>Audience</label>
+<select name="audience" class="form-control">
+
+<option value="all"
+{% if announcement.audience == "all" %}selected{% endif %}>
+All
+</option>
+
+<option value="student"
+{% if announcement.audience == "student" %}selected{% endif %}>
+Students
+</option>
+
+<option value="driver"
+{% if announcement.audience == "driver" %}selected{% endif %}>
+Drivers
+</option>
+
+</select>
+</div>
+
+<!-- Expiry Date -->
+<div class="mb-3">
+<label>Expiry Date</label>
+<input type="datetime-local"
+name="expiry_date"
+value="{{ announcement.expiry_date|date:'Y-m-d\\TH:i' }}"
+class="form-control">
+</div>
+
+<!-- Active Status -->
+<div class="mb-3">
+<label>
+<input type="checkbox" name="is_active"
+{% if announcement.is_active %}checked{% endif %}>
+Active
+</label>
+</div>
+
+<!-- Update Button -->
+<button class="btn btn-primary">
+✏️ Update Announcement
+</button>
+
+</form>
+
+</div>
+
+{% endblock %}

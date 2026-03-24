@@ -9,23 +9,44 @@
 <form method="POST">
 {% csrf_token %}
 
+<!-- Title -->
 <div class="mb-3">
-
 <label>Title</label>
-<input type="text" name="title" class="form-control">
-
+<input type="text" name="title" class="form-control" required>
 </div>
 
+<!-- Description -->
 <div class="mb-3">
-
 <label>Description</label>
-
-<textarea name="description" class="form-control"></textarea>
-
+<textarea name="message" class="form-control" rows="4" required></textarea>
 </div>
 
+<!-- Audience -->
+<div class="mb-3">
+<label>Audience</label>
+<select name="audience" class="form-control">
+    <option value="all">All</option>
+    <option value="student">Students</option>
+    <option value="driver">Drivers</option>
+</select>
+</div>
+
+<!-- Expiry Date -->
+<div class="mb-3">
+<label>Expiry Date (Optional)</label>
+<input type="datetime-local" name="expiry_date" class="form-control">
+</div>
+
+<!-- Active Status -->
+<div class="mb-3">
+<label>
+<input type="checkbox" name="is_active" checked> Active
+</label>
+</div>
+
+<!-- Submit Button -->
 <button class="btn btn-success">
-Post Announcement
+📢 Post Announcement
 </button>
 
 </form>

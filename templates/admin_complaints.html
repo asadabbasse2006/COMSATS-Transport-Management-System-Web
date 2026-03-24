@@ -12,6 +12,7 @@
 <th>Student</th>
 <th>Complaint</th>
 <th>Status</th>
+    <th>Action</th>
 </tr>
 
 {% for c in complaints %}
@@ -21,7 +22,15 @@
 <td>{{ c.student.user.get_full_name }}</td>
 <td>{{ c.message }}</td>
 <td>{{ c.status }}</td>
+<td>
+    <a href="{% url 'update_complaint_status' c.id 'resolved' %}" class="btn btn-success btn-sm">
+        Resolve
+    </a>
 
+    <a href="{% url 'update_complaint_status' c.id 'rejected' %}" class="btn btn-danger btn-sm">
+        Reject
+    </a>
+</td>
 </tr>
 
 {% endfor %}

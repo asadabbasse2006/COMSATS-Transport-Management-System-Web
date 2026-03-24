@@ -11,7 +11,53 @@
 
 </div>
 
+
+
 <div class="dashboard-card">
+
+    <form method="GET" class="row mb-4">
+
+    <!-- 🔍 Search -->
+    <div class="col-md-4">
+        <input type="text" name="search" class="form-control"
+               placeholder="Search name or reg number"
+               value="{{ request.GET.search }}">
+    </div>
+
+    <!-- 🎓 Batch Filter -->
+    <div class="col-md-3">
+        <select name="batch" class="form-select">
+            <option value="">All Batches</option>
+            {% for b in batch_list %}
+                <option value="{{ b }}"
+                    {% if request.GET.batch == b %}selected{% endif %}>
+                    {{ b }}
+                </option>
+            {% endfor %}
+        </select>
+    </div>
+
+    <!-- 🚌 Route Filter -->
+    <div class="col-md-3">
+        <select name="route" class="form-select">
+            <option value="">All Routes</option>
+            {% for route in routes %}
+                <option value="{{ route.id }}"
+                    {% if request.GET.route == route.id|stringformat:"s" %}selected{% endif %}>
+                    {{ route.name }}
+                </option>
+            {% endfor %}
+        </select>
+    </div>
+
+    <!-- Filter Button -->
+    <div class="col-md-2">
+        <button type="submit" class="btn btn-primary w-100">
+            Filter
+        </button>
+    </div>
+
+</form>
 
 <table class="table">
 

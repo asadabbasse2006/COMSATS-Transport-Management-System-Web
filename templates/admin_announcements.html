@@ -2,27 +2,56 @@
 
 {% block content %}
 
-<h4>Announcements</h4>
+<div class="d-flex justify-content-between mb-3">
+<h4>Announcement Management</h4>
+
+<a href="{% url 'add_announcement' %}" class="btn btn-primary">
+<i class="bi bi-plus-circle"></i> Add Announcement
+</a>
+
+</div>
 
 <div class="dashboard-card">
 
 <table class="table">
 
+<thead>
 <tr>
-<th>Title</th>
-<th>Date</th>
+<th>Announcement Title</th>
+<th>Date Created</th>
+<th>Date Expiry</th>
+<th>Description</th>
 </tr>
+</thead>
 
-{% for a in announcements %}
+<tbody>
+
+{% for announcement in announcements %}
 
 <tr>
 
-<td>{{ a.title }}</td>
-<td>{{ a.created_at }}</td>
+<td>{{ announcement.title }}</td>
+<td>{{ announcement.created_at }}</td>
+<td>{{ announcement.expiry_date }}</td>
+<td>{{ announcement.message }}</td>
+
+<td>
+
+<a href="{% url 'edit_announcement' announcement.id %}" class="btn btn-warning btn-sm">
+<i class="bi bi-pencil"></i>
+</a>
+
+<a href="{% url 'delete_announcement' announcement.id %}" class="btn btn-danger btn-sm">
+<i class="bi bi-trash"></i>
+</a>
+
+</td>
 
 </tr>
 
 {% endfor %}
+
+</tbody>
 
 </table>
 

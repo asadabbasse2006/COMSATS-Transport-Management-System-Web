@@ -2,29 +2,56 @@
 
 {% block content %}
 
-<h4>Drivers Management</h4>
+<div class="d-flex justify-content-between mb-3">
+    <h4>Drivers Management</h4>
+
+    <a href="{% url 'add_driver' %}" class="btn btn-primary">
+        <i class="bi bi-plus-circle"></i> Add Driver
+    </a>
+</div>
 
 <div class="dashboard-card">
 
-<table class="table">
+<table class="table table-striped table-hover">
 
+<thead class="table-dark">
 <tr>
-<th>Name</th>
-<th>Phone</th>
-<th>Assigned Bus</th>
+    <th>Username</th>
+    <th>License Number</th>
+    <th>Assigned Bus</th>
+    <th>Route</th>
+    <th>Actions</th>
 </tr>
+</thead>
+
+<tbody>
 
 {% for driver in drivers %}
 
 <tr>
+    <td>{{ driver.user.username }}</td>
+    <td>{{ driver.license_number }}</td>
+    <td>{{ driver.assigned_bus.bus_number }}</td>
+    <td>{{ driver.route.route_name }}</td>
 
-<td>{{ driver.user.get_full_name }}</td>
-<td>{{ driver.phone }}</td>
-<td>{{ driver.assigned_bus }}</td>
+    <td>
+        <a href="{% url 'edit_driver' driver.id %}" class="btn btn-warning btn-sm">
+            <i class="bi bi-pencil"></i>
+        </a>
 
+        <a href="{% url 'delete_driver' driver.id %}" class="btn btn-danger btn-sm">
+            <i class="bi bi-trash"></i>
+        </a>
+    </td>
 </tr>
 
+{% empty %}
+<tr>
+    <td colspan="5" class="text-center">No Drivers Found</td>
+</tr>
 {% endfor %}
+
+</tbody>
 
 </table>
 

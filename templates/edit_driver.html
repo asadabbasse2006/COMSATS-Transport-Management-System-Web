@@ -10,34 +10,30 @@
 {% csrf_token %}
 
 <div class="mb-3">
-<label>Phone</label>
-
-<input type="text"
-name="phone"
-value="{{ driver.phone }}"
-class="form-control">
-
+<label>Username</label>
+<input type="text" name="username" value="{{ driver.user.username }}" class="form-control">
 </div>
 
 <div class="mb-3">
+<label>Password</label>
+<input type="password" name="password" class="form-control" placeholder="Leave blank to keep same">
+</div>
 
+<div class="mb-3">
+<label>License Number</label>
+<input type="text" name="license_number" value="{{ driver.license_number }}" class="form-control">
+</div>
+
+<div class="mb-3">
 <label>Assigned Bus</label>
-
-<select name="bus" class="form-control">
-
+<select name="assigned_bus" class="form-control">
 {% for bus in buses %}
-
 <option value="{{ bus.id }}"
 {% if bus.id == driver.assigned_bus.id %}selected{% endif %}>
-
 {{ bus.bus_number }}
-
 </option>
-
 {% endfor %}
-
 </select>
-
 </div>
 
 <button class="btn btn-primary">

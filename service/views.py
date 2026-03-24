@@ -8,7 +8,7 @@ import re
 from datetime import date
 from django.core.mail import send_mail
 from job_portal import settings
-from service.models import Route, AccountProfile, Student,Announcement,Bus,Driver,Attendance
+from service.models import Route, AccountProfile, Student,Announcement,Bus,Driver,Attendance,Driver
 from service.forms import ProfileEditForm
 
 import random
@@ -219,7 +219,7 @@ def admin_dashboard(request):
     drivers = Driver.objects.all()
     buses = Bus.objects.all()
     routes = Route.objects.all()
-    complaints = Complaint.objects.all().order_by('complaint_date')[:5]
+    complaints = Complaint.objects.all().order_by('id')[:5]
     context = {
         "students":students,
         "drivers":drivers,
@@ -231,8 +231,45 @@ def admin_dashboard(request):
     return render(request,"admin_dashboard.html",context)
 
 def admin_students(request):
-    students = Student.objects.all()
-    return render(request, "admin_students.html", {"students": students})
+    students = Student.objects.all().order_by('reg_number')
+
+    # Get filter values
+    search_query = request.GET.get('search')
+    batch = request.GET.get('batch')
+    route_id = request.GET.get('route')
+
+    # 🔍 Search (name + reg number)
+    if search_query:
+        students = students.filter(
+            reg_number__icontains=search_query
+        ) | students.filter(
+            user__first_name__icontains=search_query
+        ) | students.filter(
+            user__last_name__icontains=search_query
+        )
+
+    # 🎓 Batch filter (SP23, FA24 etc.)
+    if batch:
+        students = students.filter(reg_number__icontains=batch)
+
+    # 🚌 Route filter
+    if route_id:
+        students = students.filter(route__id=route_id)
+
+    # For dropdown
+    routes = Route.objects.all()
+
+    # 🔥 Dynamic batch list
+    reg_numbers = Student.objects.values_list('reg_number', flat=True)
+    batch_list = sorted(set([reg[:4] for reg in reg_numbers if reg]))
+
+    context = {
+        "students": students,
+        "routes": routes,
+        "batch_list": batch_list,
+    }
+
+    return render(request, "admin_students.html", context)
 
 
 def admin_drivers(request):
@@ -264,6 +301,81 @@ def edit_bus(request, id):
         "bus": bus,
         "routes": routes
     })
+def add_announcement(request):
+
+    if request.method == "POST":
+
+        title = request.POST.get("title")
+        message = request.POST.get("message")
+        audience = request.POST.get("audience")
+        expiry = request.POST.get("expiry_date")
+
+        announcement = Announcement.objects.create(
+            title=title,
+            message=message,
+            audience=audience,
+            expiry_date=expiry if expiry else None
+        )
+
+        # 🔥 Send email automatically
+        send_announcement_email(title, message)
+
+        return redirect('admin_announcements')
+
+    return render(request, "add_announcement.html")
+
+def edit_announcement(request, id):
+
+    announcement = Announcement.objects.get(id=id)
+
+    if request.method == "POST":
+
+        announcement.title = request.POST.get("title")
+        announcement.message = request.POST.get("message")
+        announcement.audience = request.POST.get("audience")
+        announcement.expiry_date = request.POST.get("expiry_date") or None
+        announcement.is_active = True if request.POST.get("is_active") == "on" else False
+
+        announcement.save()
+
+        return redirect('admin_announcements')
+
+    return render(request, "edit_announcement.html", {
+        "announcement": announcement
+    })
+
+def update_complaint_status(request, id, status):
+    complaint = Complaint.objects.get(id=id)
+    complaint.status = status
+    complaint.save()
+    return redirect('admin_complaints')
+
+from django.shortcuts import get_object_or_404
+
+def delete_announcement(request, id):
+
+    announcement = get_object_or_404(Announcement, id=id)
+
+    announcement.delete()
+
+    return redirect('admin_announcement')
+
+from django.core.mail import send_mail
+from django.contrib.auth.models import User
+
+def send_announcement_email(title, message):
+
+    users = User.objects.exclude(email="")
+
+    emails = [user.email for user in users]
+
+    send_mail(
+        subject=title,
+        message=message,
+        from_email=settings.EMAIL_HOST_USER,
+        recipient_list=emails,
+        fail_silently=True
+    )
 
 def delete_bus(request,id):
     bus = Bus.objects.get(id=id)
@@ -281,6 +393,7 @@ def admin_attendance(request):
 
 
 def admin_complaints(request):
+    complaints = Complaint.objects.all()
     complaints = Complaint.objects.all()
     return render(request, "admin_complaints.html", {"complaints": complaints})
 
@@ -352,6 +465,77 @@ def add_student(request):
 
     return render(request, "add_student.html", {"routes": routes})
 
+def add_driver(request):
+    buses = Bus.objects.all()
+
+    if request.method == "POST":
+        username = request.POST.get("username")
+        password = request.POST.get("password")
+        assigned_bus_id = request.POST.get("assigned_bus")
+        license_number = request.POST.get("license_number")
+
+        if User.objects.filter(username=username).exists():
+            messages.error(request, "Username already exists!")
+            return redirect('add_driver')
+
+        user = User.objects.create_user(
+            username=username,
+            password=password
+        )
+
+        bus_obj = Bus.objects.get(id=assigned_bus_id)
+
+        Driver.objects.create(
+            user=user,
+            assigned_bus=bus_obj,
+            license_number=license_number
+        )
+
+        messages.success(request, "Driver added successfully!")
+        return redirect('admin_drivers')
+
+    return render(request, "add_driver.html", {"bus": buses})
+
+def edit_driver(request, id):
+    driver = Driver.objects.get(id=id)
+    buses = Bus.objects.all()
+
+    if request.method == "POST":
+        username = request.POST.get("username")
+        password = request.POST.get("password")
+        bus_id = request.POST.get("assigned_bus")
+        license_number = request.POST.get("license_number")
+
+        # Update user info
+        driver.user.username = username
+        if password:  # only update if provided
+            driver.user.set_password(password)
+        driver.user.save()
+
+        # Update driver info
+        driver.assigned_bus = Bus.objects.get(id=bus_id)
+        driver.license_number = license_number
+
+        driver.save()
+        messages.success(request, "You have successfully edited the driver")
+
+        return redirect('admin_drivers')
+
+    return render(request, "edit_driver.html", {
+        "driver": driver,
+        "buses": buses
+    })
+
+
+def delete_driver(request, id):
+
+    driver = get_object_or_404(Driver, id=id)
+
+    driver.delete()
+
+    return redirect('admin_drivers')
+
+
 def add_bus(request):
 
     routes = Route.objects.all()
@@ -390,24 +574,24 @@ def student_dashboard(request):
 
     if profile.role != "student":
         return HttpResponseBadRequest("Access denied")
+
     student = Student.objects.get(user=request.user)
     route = student.route
     announcements = Announcement.objects.all()
 
-    bus = Bus.objects.get(route=route)
+    # Safe bus fetch
+    bus = Bus.objects.filter(route=route).first()
 
-    # Attendance
+    # ✅ Correct attendance
     attendance = Attendance.objects.filter(student=student)
 
     total_rides = attendance.count()
     present_rides = attendance.filter(is_present=True).count()
     absent_rides = total_rides - present_rides
 
-    per = 0
-    if total_rides > 0:
-        per = (present_rides / total_rides) * 100
+    per = (present_rides / total_rides * 100) if total_rides > 0 else 0
 
-    # Driver info
+    # Driver
     driver = Driver.objects.filter(assigned_bus=bus).first()
     driver_name = driver.user.get_full_name() if driver else "Not Assigned"
 
@@ -427,7 +611,8 @@ def student_dashboard(request):
 
             return redirect("student_dashboard")
 
-    complaints = Complaint.objects.filter(student=student).order_by("-complaint_date")
+    # ✅ Fixed ordering
+    complaints = Complaint.objects.filter(student=student).order_by("-id")
 
     context = {
         "student": student,
@@ -440,7 +625,7 @@ def student_dashboard(request):
         "present_rides": present_rides,
         "absent_rides": absent_rides,
         "per": round(per, 2),
-        "attendance":attendance
+        "attendance": attendance
     }
 
     return render(request, "student_dashboard.html", context)
