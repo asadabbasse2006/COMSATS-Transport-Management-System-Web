@@ -134,14 +134,9 @@ Distributed under the **MIT License**. See `LICENSE` for more information.
 
   * **Reg No:** SP24-BSE-082
   * **Organization:** COMSATS University Islamabad, Sahiwal Campus
-  * **GitHub:** [@ahsansohail069](https://www.google.com/search?q=https://github.com/asadabbasse2006)
+  * **GitHub:** [@asadabbasse2006](https://www.google.com/search?q=https://github.com/asadabbasse2006)
   * **Email:** asadse2006@gmail.com
 
------
-
-*Built with ❤️ for a smarter Ahmadpur and COMSATS.*
-
-```
 
 ---
 
