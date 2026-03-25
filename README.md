@@ -9,8 +9,6 @@
 ## 🚀 Project Overview
 This **Transport Management System** is designed specifically for **COMSATS University Islamabad, Sahiwal Campus**. It streamlines the process of managing student registrations, bus routing, driver assignments, and real-time attendance, replacing manual paperwork with a robust digital interface.
 
-> Developed as part of a commitment to improving campus infrastructure through the **IT Learning Ahmadpur** initiative.
-
 ---
 
 ## 📌 Features
@@ -138,6 +136,3 @@ Distributed under the **MIT License**. See `LICENSE` for more information.
 
 
 ---
-
-**Would you like me to create a `requirements.txt` file content based on this Django setup?**
-```
