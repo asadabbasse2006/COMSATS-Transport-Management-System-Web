@@ -134,4 +134,8 @@ EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_HOST_USER =
 EMAIL_HOST_PASSWORD =
+<<<<<<< HEAD
 EMAIL_USE_TLS = True
+=======
+EMAIL_USE_TLS = True
+>>>>>>> 1e78bb14d559a992de3c9db865bf0233e9bb822b
