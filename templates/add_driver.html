@@ -1,60 +1,52 @@
 {% extends 'admin_base.html' %}
 
-{% if messages %}
-  {% for message in messages %}
-    <div class="alert alert-danger">
-      {{ message }}
-    </div>
-  {% endfor %}
-{% endif %}
-
 {% block content %}
 
 <h4>Add Driver</h4>
 
 <div class="dashboard-card">
 
-<form method="POST">
-{% csrf_token %}
+  <form method="POST">
+    {% csrf_token %}
 
-<div class="mb-3">
-<label>Username</label>
-<input type="text" name="username" class="form-control">
-</div>
+    <div class="mb-3">
+      <label>Username</label>
+      <input type="text" name="username" class="form-control">
+    </div>
 
-<div class="mb-3">
-<label>Password</label>
-<input type="password" name="password" class="form-control">
-</div>
+    <div class="mb-3">
+      <label>Password</label>
+      <input type="password" name="password" class="form-control">
+    </div>
 
-<div class="mb-3">
-<label>License Number</label>
-<input type="text" name="license_number" class="form-control">
-</div>
+    <div class="mb-3">
+      <label>License Number</label>
+      <input type="text" name="license_number" class="form-control">
+    </div>
 
-<div class="mb-3">
-<label>Assign Bus</label>
-<select name="assigned_bus" class="form-control">
-    {% for bus in bus %}
-    <option value="{{ bus.id }}">{{ bus.bus_number }}</option>
-    {% endfor %}
-</select>
-</div>
+    <div class="mb-3">
+      <label>Assign Bus</label>
+      <select name="assigned_bus" class="form-control">
+        {% for bus in bus %}
+        <option value="{{ bus.id }}">{{ bus.bus_number }}</option>
+        {% endfor %}
+      </select>
+    </div>
 
-<div class="mb-3">
-<label>Route</label>
-<select name="route" class="form-control">
-{% for r in routes %}
-<option value="{{ r.id }}">{{ r.route_name }}</option>
-{% endfor %}
-</select>
-</div>
+    <div class="mb-3">
+      <label>Route</label>
+      <select name="route" class="form-control">
+        {% for r in routes %}
+        <option value="{{ r.id }}">{{ r.route_name }}</option>
+        {% endfor %}
+      </select>
+    </div>
 
-<button class="btn btn-success">
-Add Driver
-</button>
+    <button class="btn btn-success">
+      Add Driver
+    </button>
 
-</form>
+  </form>
 
 </div>
 

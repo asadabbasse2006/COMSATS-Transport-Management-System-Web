@@ -3,11 +3,11 @@
 {% block content %}
 
 <div class="d-flex justify-content-between mb-3">
-<h4>Students Management</h4>
+    <h4>Students Management</h4>
 
-<a href="{% url 'add_student' %}" class="btn btn-primary">
-<i class="bi bi-plus-circle"></i> Add Student
-</a>
+    <a href="{% url 'add_student' %}" class="btn btn-primary">
+        <i class="bi bi-plus-circle"></i> Add Student
+    </a>
 
 </div>
 
@@ -17,90 +17,87 @@
 
     <form method="GET" class="row mb-4">
 
-    <!-- 🔍 Search -->
-    <div class="col-md-4">
-        <input type="text" name="search" class="form-control"
-               placeholder="Search name or reg number"
-               value="{{ request.GET.search }}">
-    </div>
+        <!-- 🔍 Search -->
+        <div class="col-md-4">
+            <input type="text" name="search" class="form-control" placeholder="Search name or reg number"
+                value="{{ request.GET.search }}">
+        </div>
 
-    <!-- 🎓 Batch Filter -->
-    <div class="col-md-3">
-        <select name="batch" class="form-select">
-            <option value="">All Batches</option>
-            {% for b in batch_list %}
-                <option value="{{ b }}"
-                    {% if request.GET.batch == b %}selected{% endif %}>
+        <!-- 🎓 Batch Filter -->
+        <div class="col-md-3">
+            <select name="batch" class="form-select">
+                <option value="">All Batches</option>
+                {% for b in batch_list %}
+                <option value="{{ b }}" {% if request.GET.batch==b %}selected{% endif %}>
                     {{ b }}
                 </option>
-            {% endfor %}
-        </select>
-    </div>
+                {% endfor %}
+            </select>
+        </div>
 
-    <!-- 🚌 Route Filter -->
-    <div class="col-md-3">
-        <select name="route" class="form-select">
-            <option value="">All Routes</option>
-            {% for route in routes %}
-                <option value="{{ route.id }}"
-                    {% if request.GET.route == route.id|stringformat:"s" %}selected{% endif %}>
+        <!-- 🚌 Route Filter -->
+        <div class="col-md-3">
+            <select name="route" class="form-select">
+                <option value="">All Routes</option>
+                {% for route in routes %}
+                <option value="{{ route.id }}" {% if request.GET.route==route.id|stringformat:"s" %}selected{% endif %}>
                     {{ route.name }}
                 </option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <!-- Filter Button -->
+        <div class="col-md-2">
+            <button type="submit" class="btn btn-primary w-100">
+                Filter
+            </button>
+        </div>
+
+    </form>
+
+    <table class="table">
+
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Registration</th>
+                <th>Route</th>
+                <th>Fee Status</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+
+        <tbody>
+
+            {% for student in students %}
+
+            <tr>
+
+                <td>{{ student.user.get_full_name }}</td>
+                <td>{{ student.reg_number }}</td>
+                <td>{{ student.route }}</td>
+                <td>{{ student.fee_status }}</td>
+
+                <td>
+
+                    <a href="{% url 'edit_student' student.id %}" class="btn btn-warning btn-sm">
+                        <i class="bi bi-pencil"></i>
+                    </a>
+
+                    <a href="{% url 'delete_student' student.id %}" class="btn btn-danger btn-sm">
+                        <i class="bi bi-trash"></i>
+                    </a>
+
+                </td>
+
+            </tr>
+
             {% endfor %}
-        </select>
-    </div>
 
-    <!-- Filter Button -->
-    <div class="col-md-2">
-        <button type="submit" class="btn btn-primary w-100">
-            Filter
-        </button>
-    </div>
+        </tbody>
 
-</form>
-
-<table class="table">
-
-<thead>
-<tr>
-<th>Name</th>
-<th>Registration</th>
-<th>Route</th>
-<th>Fee Status</th>
-<th>Actions</th>
-</tr>
-</thead>
-
-<tbody>
-
-{% for student in students %}
-
-<tr>
-
-<td>{{ student.user.get_full_name }}</td>
-<td>{{ student.reg_number }}</td>
-<td>{{ student.route }}</td>
-<td>{{ student.fee_status }}</td>
-
-<td>
-
-<a href="{% url 'edit_student' student.id %}" class="btn btn-warning btn-sm">
-<i class="bi bi-pencil"></i>
-</a>
-
-<a href="{% url 'delete_student' student.id %}" class="btn btn-danger btn-sm">
-<i class="bi bi-trash"></i>
-</a>
-
-</td>
-
-</tr>
-
-{% endfor %}
-
-</tbody>
-
-</table>
+    </table>
 
 </div>
 

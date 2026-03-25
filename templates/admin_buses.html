@@ -3,57 +3,57 @@
 {% block content %}
 
 <div class="d-flex justify-content-between mb-3">
-<h4>Buses Management</h4>
+    <h4>Buses Management</h4>
 
-<a href="{% url 'add_bus' %}" class="btn btn-primary">
-<i class="bi bi-plus-circle"></i> Add Bus
-</a>
+    <a href="{% url 'add_bus' %}" class="btn btn-primary">
+        <i class="bi bi-plus-circle"></i> Add Bus
+    </a>
 
 </div>
 
 <div class="dashboard-card">
 
-<table class="table">
+    <table class="table">
 
-<thead>
-<tr>
-<th>Bus Number</th>
-<th>Route</th>
-<th>Capacity</th>
-<th>Status</th>
-</tr>
-</thead>
+        <thead>
+            <tr>
+                <th>Bus Number</th>
+                <th>Route</th>
+                <th>Capacity</th>
+                <th>Status</th>
+            </tr>
+        </thead>
 
-<tbody>
+        <tbody>
 
-{% for bus in buses %}
+            {% for bus in buses %}
 
-<tr>
+            <tr>
 
-<td>{{ bus.bus_number }}</td>
-<td>{{ bus.route }}</td>
-<td>{{ bus.capacity }}</td>
-<td>{{ bus.is_active }}</td>
+                <td>{{ bus.bus_number }}</td>
+                <td>{{ bus.route }}</td>
+                <td>{{ bus.capacity }}</td>
+                <td>{{ bus.is_active }}</td>
 
-<td>
+                <td>
 
-<a href="{% url 'edit_bus' bus.id %}" class="btn btn-warning btn-sm">
-<i class="bi bi-pencil"></i>
-</a>
+                    <a href="{% url 'edit_bus' bus.id %}" class="btn btn-warning btn-sm">
+                        <i class="bi bi-pencil"></i>
+                    </a>
 
-<a href="{% url 'delete_bus' bus.id %}" class="btn btn-danger btn-sm">
-<i class="bi bi-trash"></i>
-</a>
+                    <a href="{% url 'delete_bus' bus.id %}" class="btn btn-danger btn-sm">
+                        <i class="bi bi-trash"></i>
+                    </a>
 
-</td>
+                </td>
 
-</tr>
+            </tr>
 
-{% endfor %}
+            {% endfor %}
 
-</tbody>
+        </tbody>
 
-</table>
+    </table>
 
 </div>
 

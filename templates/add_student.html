@@ -6,42 +6,42 @@
 
 <div class="dashboard-card">
 
-<form method="POST">
-{% csrf_token %}
+    <form method="POST">
+        {% csrf_token %}
 
-<div class="mb-3">
-<label>Registration Number</label>
-<input type="text" name="reg" class="form-control">
-</div>
+        <div class="mb-3">
+            <label>Registration Number</label>
+            <input type="text" name="reg" class="form-control">
+        </div>
 
-<div class="mb-3">
-<label>Department</label>
-<input type="text" name="department" class="form-control">
-</div>
+        <div class="mb-3">
+            <label>Department</label>
+            <input type="text" name="department" class="form-control">
+        </div>
 
-<div class="mb-3">
-<label>Semester</label>
-<input type="number" name="semester" class="form-control">
-</div>
+        <div class="mb-3">
+            <label>Semester</label>
+            <input type="number" name="semester" class="form-control">
+        </div>
 
-<div class="mb-3">
-<label>Route</label>
+        <div class="mb-3">
+            <label>Route</label>
 
-<select name="route" class="form-control">
+            <select name="route" class="form-control">
 
-{% for r in routes %}
-<option value="{{ r.id }}">{{ r.route_name }}</option>
-{% endfor %}
+                {% for r in routes %}
+                <option value="{{ r.id }}">{{ r.route_name }}</option>
+                {% endfor %}
 
-</select>
+            </select>
 
-</div>
+        </div>
 
-<button class="btn btn-success">
-Add Student
-</button>
+        <button class="btn btn-success">
+            Add Student
+        </button>
 
-</form>
+    </form>
 
 </div>
 

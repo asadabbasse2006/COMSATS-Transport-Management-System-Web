@@ -6,29 +6,29 @@
 
 <div class="dashboard-card">
 
-<table class="table">
+    <table class="table">
 
-<tr>
-<th>Route Name</th>
-<th>Start</th>
-<th>End</th>
-<th>Departure</th>
-</tr>
+        <tr>
+            <th>Route Name</th>
+            <th>Start</th>
+            <th>End</th>
+            <th>Departure</th>
+        </tr>
 
-{% for route in routes %}
+        {% for route in routes %}
 
-<tr>
+        <tr>
 
-<td>{{ route.route_name }}</td>
-<td>{{ route.start_location }}</td>
-<td>{{ route.end_location }}</td>
-<td>{{ route.departure_time }}</td>
+            <td>{{ route.route_name }}</td>
+            <td>{{ route.start_location }}</td>
+            <td>{{ route.end_location }}</td>
+            <td>{{ route.departure_time }}</td>
 
-</tr>
+        </tr>
 
-{% endfor %}
+        {% endfor %}
 
-</table>
+    </table>
 
 </div>
 

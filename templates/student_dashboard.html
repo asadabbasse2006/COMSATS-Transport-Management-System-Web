@@ -2,428 +2,433 @@
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
 
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Student Dashboard - COMSATS Transport System</title>
+  <title>Student Dashboard - COMSATS Transport System</title>
 
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
 
-<style>
+  <style>
+    body {
+      background: linear-gradient(-45deg, #1e3a8a, #2563eb, #9333ea, #ec4899);
+      background-size: 400% 400%;
+      animation: gradientMove 10s ease infinite;
+    }
 
-body {
-    background: linear-gradient(-45deg, #1e3a8a, #2563eb, #9333ea, #ec4899);
-    background-size: 400% 400%;
-    animation: gradientMove 10s ease infinite;
-}
+    @keyframes gradientMove {
+      0% {
+        background-position: 0% 50%;
+      }
 
-@keyframes gradientMove {
-    0% { background-position: 0% 50%; }
-    50% { background-position: 100% 50%; }
-    100% { background-position: 0% 50%; }
-}
+      50% {
+        background-position: 100% 50%;
+      }
 
-/* Navbar */
-.navbar{
-    background:#1e40af;
-}
+      100% {
+        background-position: 0% 50%;
+      }
+    }
 
-.navbar-brand{
-    color:white;
-    font-weight:bold;
-}
+    /* Navbar */
+    .navbar {
+      background: #1e40af;
+    }
 
-.logo{
-    width:60px;
-    margin-right:10px;
-    border-radius:70%;
-}
+    .navbar-brand {
+      color: white;
+      font-weight: bold;
+    }
 
-/* Dashboard cards */
+    .logo {
+      width: 60px;
+      margin-right: 10px;
+      border-radius: 70%;
+    }
 
-.dashboard-card{
-    border:none;
-    border-radius:15px;
-    padding:20px;
-    background:white;
-    box-shadow:0 8px 20px rgba(0,0,0,0.08);
-    transition:0.3s;
-}
+    /* Dashboard cards */
 
-.dashboard-card:hover{
-    transform:translateY(-5px);
-}
+    .dashboard-card {
+      border: none;
+      border-radius: 15px;
+      padding: 20px;
+      background: white;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+      transition: 0.3s;
+    }
 
-/* Section spacing */
+    .dashboard-card:hover {
+      transform: translateY(-5px);
+    }
 
-.section{
-    padding-top:30px;
-}
+    /* Section spacing */
 
-/* Announcement list */
+    .section {
+      padding-top: 30px;
+    }
 
-.announcement li{
-    padding:8px 0;
-}
+    /* Announcement list */
 
-</style>
+    .announcement li {
+      padding: 8px 0;
+    }
+  </style>
 
 </head>
 
 <body>
 
-<!-- Navbar -->
+  <!-- Navbar -->
 
-<nav class="navbar navbar-expand-lg">
-<div class="container">
+  <nav class="navbar navbar-expand-lg">
+    <div class="container">
 
-<a class="navbar-brand" href="#">
-<img src="{% static 'images/COMSATS.jpeg' %}" class="logo">
-COMSATS Transport Management System
-</a>
+      <a class="navbar-brand" href="#">
+        <img src="{% static 'images/COMSATS.jpeg' %}" class="logo">
+        COMSATS Transport Management System
+      </a>
 
-<div class="ms-auto">
+      <div class="ms-auto">
 
-<a href="{% url 'profile_view' %}" class="btn btn-light me-2">
-<i class="bi bi-person"></i> Profile
-</a>
+        <a href="{% url 'profile_view' %}" class="btn btn-light me-2">
+          <i class="bi bi-person"></i> Profile
+        </a>
 
-<a href="{% url 'notifications' %}" class="btn btn-light me-2">
-<i class="bi bi-megaphone-fill"></i> Notifications
-</a>
+        <a href="{% url 'notifications' %}" class="btn btn-light me-2">
+          <i class="bi bi-megaphone-fill"></i> Notifications
+        </a>
 
-<a href="{% url 'logout' %}" class="btn btn-light">
-<i class="bi bi-box-arrow-right"></i> Logout
-</a>
+        <a href="{% url 'logout' %}" class="btn btn-light">
+          <i class="bi bi-box-arrow-right"></i> Logout
+        </a>
 
-</div>
-
-</div>
-</nav>
-
-<!-- Dashboard Cards -->
-
-<div class="container section">
-
-<div class="row g-4">
-
-<div class="col-md-3">
-<div class="dashboard-card text-center">
-<i class="bi bi-signpost-2-fill fs-2 text-primary"></i>
-<h5 class="mt-2">{{ route.route_name }}</h5>
-<p>{{ route.start_location }} → {{ route.end_location }}</p>
-</div>
-</div>
-
-<div class="col-md-3">
-<div class="dashboard-card text-center">
-<i class="bi bi-clock-fill fs-2 text-success"></i>
-<h5 class="mt-2">Bus Timing</h5>
-<p>{{ route.departure_time }}</p>
-</div>
-</div>
-
-<div class="col-md-3">
-<div class="dashboard-card text-center">
-<i class="bi bi-credit-card-fill fs-2 text-warning"></i>
-<h5 class="mt-2">Transport Fee</h5>
-<p>{{ student.fee_status }}</p>
-</div>
-</div>
-
-<div class="col-md-3">
-<div class="dashboard-card text-center">
-<i class="bi bi-bell-fill fs-2 text-danger"></i>
-<h5 class="mt-2">Announcements</h5>
-<p>{{ announcements.count }}</p>
-</div>
-</div>
-<div class="col-md-3" style="width: 1150px">
-<div class="card p-3 text-center">
-<h5>Attendance</h5>
-
-<h3 class="text-primary">{{ per }}%</h3>
-
-<div class="progress mt-2">
-
-<div class="progress-bar bg-success"
-role="progressbar"
-style="width: {{ per }}%;"
-aria-valuenow="{{ per }}"
-aria-valuemin="0"
-aria-valuemax="100">
-
-</div>
-
-</div>
-
-</div>
-</div>
-
-</div>
-
-</div>
-
-
-<!-- Route + Schedule -->
-
-<div class="container section">
-
-<div class="row g-4">
-
-<!-- Route Info -->
-
-<div class="col-md-6">
-
-<div class="dashboard-card">
-
-<h5><i class="bi bi-geo-alt-fill text-primary"></i> Route Information</h5>
-
-<hr>
-
-<p><strong>Route Name:</strong> {{ route.route_name }}</p>
-<p><strong>Start Location:</strong> {{ route.start_location }}</p>
-<p><strong>End Location:</strong> {{ route.end_location }}</p>
-<p><strong>Bus Number:</strong> {{ bus.bus_number }}</p>
-<p><strong>Driver:</strong> {{ driver_name }}</p>
-
-</div>
-
-</div>
-
-<!-- Bus Schedule -->
-
-<div class="col-md-6">
-
-<div class="dashboard-card">
-
-<h5><i class="bi bi-calendar-week-fill text-success"></i> Bus Schedule</h5>
-
-<hr>
-
-<table class="table">
-
-<thead>
-<tr>
-<th>Day</th>
-<th>Departure</th>
-<th>Return</th>
-</tr>
-</thead>
-
-<tbody>
-<tr>
-<td>Monday</td>
-<td>{{ route.departure_time}}</td>
-<td>{{ route.arrival_time}}</td>
-</tr>
-
-<tr>
-<td>Tuesday</td>
-<td>{{ route.departure_time }}</td>
-<td>{{ route.arrival_time}}</td>
-</tr>
-
-<tr>
-<td>Wednesday</td>
-<td>{{ route.departure_time}}</td>
-<td>{{ route.arrival_time }}</td>
-</tr>
-
-<tr>
-<td>Thursday</td>
-<td>{{ route.departure_time }}</td>
-<td>{{ route.arrival_time}}</td>
-</tr>
-
-<tr>
-<td>Friday</td>
-<td>{{ route.departure_time}}</td>
-<td>{{ route.arrival_time }}</td>
-</tr>
-
-</tbody>
-
-</table>
-
-</div>
-
-</div>
-
-</div>
-
-</div>
-
-<!-- Transport Card + Announcements -->
-
-<div class="container section">
-
-<div class="row g-4">
-
-<!-- Transport Card -->
-
-<div class="col-md-6">
-
-<div class="dashboard-card text-center">
-
-<h5><i class="bi bi-person-badge-fill text-primary"></i> Transport Card</h5>
-
-<hr>
-
-<p><strong>Name:</strong> {{ student.user.get_full_name }}</p>
-<p><strong>Registration No:</strong>{{ student.reg_number }}</p>
-<p><strong>Route:</strong> {{ student.route }}</p>
-<p><strong>Card ID:</strong> {{ student.transport_card_id }}</p>
-
-</div>
-
-</div>
-
-<!-- Announcements -->
-
-<div class="col-md-6">
-
-<div class="dashboard-card">
-
-<h5><i class="bi bi-megaphone-fill text-danger"></i> Announcements</h5>
-
-<hr>
-
-<ul class="announcement">
-
-{% for announcement in announcements %}
-
-<li>
-<i class="bi bi-megaphone-fill text-danger"></i>
-{{ announcement.title }}
-</li>
-
-{% empty %}
-
-<li>No announcements available</li>
-
-{% endfor %}
-
-</ul>
-
-</div>
-
-</div>
-
-</div>
-
-</div>
-
-<div class="container section">
-
-<div class="dashboard-card">
-
-<h5>
-<i class="bi bi-calendar-check text-success"></i>
-Attendance History
-</h5>
-
-<hr>
-
-<table class="table table-striped">
-
-<thead>
-<tr>
-<th>Date</th>
-<th>Bus</th>
-<th>Status</th>
-</tr>
-</thead>
-
-<tbody>
-
-{% for record in attendance %}
-
-<tr>
-
-<td>{{ record.attendance_date|date:"d M Y" }}</td>
-
-<td>{{ record.bus.bus_number }}</td>
-
-<td>
-
-{% if record.is_present %}
-<span class="badge bg-success">Present</span>
-{% else %}
-<span class="badge bg-danger">Absent</span>
-{% endif %}
-
-</td>
-
-</tr>
-
-{% empty %}
-
-<tr>
-<td colspan="3" class="text-center">
-No attendance recorded yet
-</td>
-</tr>
-
-{% endfor %}
-
-</tbody>
-
-</table>
-
-</div>
-
-</div>
-
-<!-- Complaint Section -->
-<div class="container section">
-  <div class="dashboard-card p-4 shadow-sm rounded">
-    <h5><i class="bi bi-chat-left-text-fill text-warning"></i> Submit Complaint</h5>
-    <hr>
-    <form method="POST">
-      {% csrf_token %}
-      <div class="mb-3">
-        <label class="form-label">Complaint Type</label>
-        <select class="form-select" name="complaint_type" required>
-          <option value="" disabled selected>Select a type</option>
-          <option value="Bus Delay">Bus Delay</option>
-          <option value="Driver Behavior">Driver Behavior</option>
-          <option value="Bus Cleanliness">Bus Cleanliness</option>
-        </select>
       </div>
 
-      <div class="mb-3">
-        <label class="form-label">Description</label>
-        <textarea class="form-control" name="message" rows="3" placeholder="Describe your complaint..." required></textarea>
+    </div>
+  </nav>
+
+  <!-- Dashboard Cards -->
+
+  <div class="container section">
+
+    <div class="row g-4">
+
+      <div class="col-md-3">
+        <div class="dashboard-card text-center">
+          <i class="bi bi-signpost-2-fill fs-2 text-primary"></i>
+          <h5 class="mt-2">{{ route.route_name }}</h5>
+          <p>{{ route.start_location }} → {{ route.end_location }}</p>
+        </div>
       </div>
 
-      <button type="submit" class="btn btn-primary">
-        <i class="bi bi-send-fill"></i> Submit Complaint
-      </button>
-    </form>
+      <div class="col-md-3">
+        <div class="dashboard-card text-center">
+          <i class="bi bi-clock-fill fs-2 text-success"></i>
+          <h5 class="mt-2">Bus Timing</h5>
+          <p>{{ route.departure_time }}</p>
+        </div>
+      </div>
 
-    <!-- Show previous complaints -->
-    <div class="mt-4">
-      <h6>Your Previous Complaints</h6>
-      <ul class="list-group">
-        {% for c in complaints %}
+      <div class="col-md-3">
+        <div class="dashboard-card text-center">
+          <i class="bi bi-credit-card-fill fs-2 text-warning"></i>
+          <h5 class="mt-2">Transport Fee</h5>
+          <p>{{ student.fee_status }}</p>
+        </div>
+      </div>
+
+      <div class="col-md-3">
+        <div class="dashboard-card text-center">
+          <i class="bi bi-bell-fill fs-2 text-danger"></i>
+          <h5 class="mt-2">Announcements</h5>
+          <p>{{ announcements.count }}</p>
+        </div>
+      </div>
+      <div class="col-md-3" style="width: 1150px">
+        <div class="card p-3 text-center">
+          <h5>Attendance</h5>
+
+          <h3 class="text-primary">{{ per }}%</h3>
+
+          <div class="progress mt-2">
+
+            <div class="progress-bar bg-success" role="progressbar" style="width: {{ per }}%;" aria-valuenow="{{ per }}"
+              aria-valuemin="0" aria-valuemax="100">
+
+            </div>
+
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <!-- Route + Schedule -->
+
+  <div class="container section">
+
+    <div class="row g-4">
+
+      <!-- Route Info -->
+
+      <div class="col-md-6">
+
+        <div class="dashboard-card">
+
+          <h5><i class="bi bi-geo-alt-fill text-primary"></i> Route Information</h5>
+
+          <hr>
+
+          <p><strong>Route Name:</strong> {{ route.route_name }}</p>
+          <p><strong>Start Location:</strong> {{ route.start_location }}</p>
+          <p><strong>End Location:</strong> {{ route.end_location }}</p>
+          <p><strong>Bus Number:</strong> {{ bus.bus_number }}</p>
+          <p><strong>Driver:</strong> {{ driver_name }}</p>
+
+        </div>
+
+      </div>
+
+      <!-- Bus Schedule -->
+
+      <div class="col-md-6">
+
+        <div class="dashboard-card">
+
+          <h5><i class="bi bi-calendar-week-fill text-success"></i> Bus Schedule</h5>
+
+          <hr>
+
+          <table class="table">
+
+            <thead>
+              <tr>
+                <th>Day</th>
+                <th>Departure</th>
+                <th>Return</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              <tr>
+                <td>Monday</td>
+                <td>{{ route.departure_time}}</td>
+                <td>{{ route.arrival_time}}</td>
+              </tr>
+
+              <tr>
+                <td>Tuesday</td>
+                <td>{{ route.departure_time }}</td>
+                <td>{{ route.arrival_time}}</td>
+              </tr>
+
+              <tr>
+                <td>Wednesday</td>
+                <td>{{ route.departure_time}}</td>
+                <td>{{ route.arrival_time }}</td>
+              </tr>
+
+              <tr>
+                <td>Thursday</td>
+                <td>{{ route.departure_time }}</td>
+                <td>{{ route.arrival_time}}</td>
+              </tr>
+
+              <tr>
+                <td>Friday</td>
+                <td>{{ route.departure_time}}</td>
+                <td>{{ route.arrival_time }}</td>
+              </tr>
+
+            </tbody>
+
+          </table>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- Transport Card + Announcements -->
+
+  <div class="container section">
+
+    <div class="row g-4">
+
+      <!-- Transport Card -->
+
+      <div class="col-md-6">
+
+        <div class="dashboard-card text-center">
+
+          <h5><i class="bi bi-person-badge-fill text-primary"></i> Transport Card</h5>
+
+          <hr>
+
+          <p><strong>Name:</strong> {{ student.user.get_full_name }}</p>
+          <p><strong>Registration No:</strong>{{ student.reg_number }}</p>
+          <p><strong>Route:</strong> {{ student.route }}</p>
+          <p><strong>Card ID:</strong> {{ student.transport_card_id }}</p>
+
+        </div>
+
+      </div>
+
+      <!-- Announcements -->
+
+      <div class="col-md-6">
+
+        <div class="dashboard-card">
+
+          <h5><i class="bi bi-megaphone-fill text-danger"></i> Announcements</h5>
+
+          <hr>
+
+          <ul class="announcement">
+
+            {% for announcement in announcements %}
+
+            <li>
+              <i class="bi bi-megaphone-fill text-danger"></i>
+              {{ announcement.title }}
+            </li>
+
+            {% empty %}
+
+            <li>No announcements available</li>
+
+            {% endfor %}
+
+          </ul>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+  <div class="container section">
+
+    <div class="dashboard-card">
+
+      <h5>
+        <i class="bi bi-calendar-check text-success"></i>
+        Attendance History
+      </h5>
+
+      <hr>
+
+      <table class="table table-striped">
+
+        <thead>
+          <tr>
+            <th>Date</th>
+            <th>Bus</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+
+        <tbody>
+
+          {% for record in attendance %}
+
+          <tr>
+
+            <td>{{ record.attendance_date|date:"d M Y" }}</td>
+
+            <td>{{ record.bus.bus_number }}</td>
+
+            <td>
+
+              {% if record.is_present %}
+              <span class="badge bg-success">Present</span>
+              {% else %}
+              <span class="badge bg-danger">Absent</span>
+              {% endif %}
+
+            </td>
+
+          </tr>
+
+          {% empty %}
+
+          <tr>
+            <td colspan="3" class="text-center">
+              No attendance recorded yet
+            </td>
+          </tr>
+
+          {% endfor %}
+
+        </tbody>
+
+      </table>
+
+    </div>
+
+  </div>
+
+  <!-- Complaint Section -->
+  <div class="container section">
+    <div class="dashboard-card p-4 shadow-sm rounded">
+      <h5><i class="bi bi-chat-left-text-fill text-warning"></i> Submit Complaint</h5>
+      <hr>
+      <form method="POST">
+        {% csrf_token %}
+        <div class="mb-3">
+          <label class="form-label">Complaint Type</label>
+          <select class="form-select" name="complaint_type" required>
+            <option value="" disabled selected>Select a type</option>
+            <option value="Bus Delay">Bus Delay</option>
+            <option value="Driver Behavior">Driver Behavior</option>
+            <option value="Bus Cleanliness">Bus Cleanliness</option>
+          </select>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label">Description</label>
+          <textarea class="form-control" name="message" rows="3" placeholder="Describe your complaint..."
+            required></textarea>
+        </div>
+
+        <button type="submit" class="btn btn-primary">
+          <i class="bi bi-send-fill"></i> Submit Complaint
+        </button>
+      </form>
+
+      <!-- Show previous complaints -->
+      <div class="mt-4">
+        <h6>Your Previous Complaints</h6>
+        <ul class="list-group">
+          {% for c in complaints %}
           <li class="list-group-item d-flex justify-content-between align-items-center">
             {{ c.message|truncatewords:10 }}
             {% if c.status == 'resolved' %}
-              <span class="badge bg-success rounded-pill">Resolved</span>
+            <span class="badge bg-success rounded-pill">Resolved</span>
             {% else %}
-              <span class="badge bg-warning rounded-pill">Pending</span>
+            <span class="badge bg-warning rounded-pill">Pending</span>
             {% endif %}
           </li>
-        {% empty %}
+          {% empty %}
           <li class="list-group-item">No complaints submitted yet.</li>
-        {% endfor %}
-      </ul>
+          {% endfor %}
+        </ul>
+      </div>
     </div>
   </div>
-</div>
 </body>
+
 </html>

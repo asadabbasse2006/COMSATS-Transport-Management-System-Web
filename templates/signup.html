@@ -3,255 +3,268 @@
 <html lang="en">
 
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Signup - COMSATS Transport System</title>
+    <title>Signup - COMSATS Transport System</title>
 
-<!-- Bootstrap -->
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
 
-<style>
+    <style>
+        body {
+            background: linear-gradient(-45deg, #1e3a8a, #2563eb, #9333ea, #ec4899);
+            background-size: 400% 400%;
+            animation: gradientMove 10s ease infinite;
+        }
 
-body {
-    background: linear-gradient(-45deg, #1e3a8a, #2563eb, #9333ea, #ec4899);
-    background-size: 400% 400%;
-    animation: gradientMove 10s ease infinite;
-}
+        @keyframes gradientMove {
+            0% {
+                background-position: 0% 50%;
+            }
 
-@keyframes gradientMove {
-    0% { background-position: 0% 50%; }
-    50% { background-position: 100% 50%; }
-    100% { background-position: 0% 50%; }
-}
+            50% {
+                background-position: 100% 50%;
+            }
 
-/* Navbar */
-.navbar{
-    background:#1e40af;
-    padding:10px 0;
-}
+            100% {
+                background-position: 0% 50%;
+            }
+        }
 
-.navbar-brand{
-    color:white !important;
-    font-weight:600;
-    display:flex;
-    align-items:center;
-}
+        /* Navbar */
+        .navbar {
+            background: #1e40af;
+            padding: 10px 0;
+        }
 
-.logo{
-    width:40px;
-    margin-right:10px;
-    border-radius: 70%;
-}
+        .navbar-brand {
+            color: white !important;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+        }
 
-/* Center container */
-.page-wrapper{
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    padding:40px 0;
-}
+        .logo {
+            width: 40px;
+            margin-right: 10px;
+            border-radius: 70%;
+        }
 
-/* Signup Card */
-.signup-card{
-    width:460px;
-    padding:35px;
-    border-radius:18px;
-    background:white;
-    box-shadow:0 12px 40px rgba(0,0,0,0.15);
-}
+        /* Center container */
+        .page-wrapper {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 40px 0;
+        }
 
-/* System Title */
-.system-title{
-    font-weight:700;
-    color:#1e40af;
-}
+        /* Signup Card */
+        .signup-card {
+            width: 460px;
+            padding: 35px;
+            border-radius: 18px;
+            background: white;
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+        }
 
-/* Footer */
-.footer{
-    text-align:center;
-    margin-top:20px;
-    font-size:14px;
-    color:#666;
-}
+        /* System Title */
+        .system-title {
+            font-weight: 700;
+            color: #1e40af;
+        }
 
-/* Button */
-.btn-primary{
-    background:#2563eb;
-    border:none;
-}
+        /* Footer */
+        .footer {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 14px;
+            color: #666;
+        }
 
-.btn-primary:hover{
-    background:#1e40af;
-}
+        /* Button */
+        .btn-primary {
+            background: #2563eb;
+            border: none;
+        }
 
-</style>
+        .btn-primary:hover {
+            background: #1e40af;
+        }
+    </style>
 </head>
 
 <body>
-<!-- Navbar -->
-<nav class="navbar navbar-expand-lg">
-<div class="container">
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg">
+        <div class="container">
 
-<a class="navbar-brand" href="#">
-<img src="{% static 'images/COMSATS.jpeg' %}" class="logo">
-<i class="bi bi-bus-front-fill me-2"></i> COMSATS Transport
-</a>
+            <a class="navbar-brand" href="#">
+                <img src="{% static 'images/COMSATS.jpeg' %}" class="logo">
+                <i class="bi bi-bus-front-fill me-2"></i> COMSATS Transport
+            </a>
 
-<div class="ms-auto">
-<a href="{% url 'home' %}" class="btn btn-light">
-<i class="bi bi-house-door"></i> Home
-</a>
-</div>
+            <div class="ms-auto">
+                <a href="{% url 'home' %}" class="btn btn-light">
+                    <i class="bi bi-house-door"></i> Home
+                </a>
+            </div>
 
-</div>
-</nav>
-
-<!-- Center Wrapper -->
-<div class="page-wrapper">
-
-<div class="signup-card">
-
-    <!-- Logo -->
-    <div class="text-center mb-3">
-        <img src="{% static 'images/COMSATS.jpeg' %}" class="logo" alt="COMSATS Logo">
-        <h4 class="text-center system-title">
-<i class="bi bi-person-plus-fill"></i> COMSATS Transport System
-</h4>
-<p class="text-muted">
-<i class="bi bi-pencil-square"></i> Create your account
-</p>
-    </div>
-
-    <!-- Django Messages -->
-                    {% if messages %}
-                        {% for message in messages %}
-                            <div class="alert alert-{{ message.tags }} alert-dismissible fade show">
-                                {{ message }}
-                                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-                            </div>
-                        {% endfor %}
-                    {% endif %}
-
-    <form method="POST">
-        {% csrf_token %}
-
-        <!-- Username -->
-        <div class="mb-3">
-            <label class="form-label">
-<i class="bi bi-person-fill"></i> Username
-</label>
-<input type="text" class="form-control" name="username" placeholder="Enter your username" required>
         </div>
+    </nav>
 
-        <!-- Email -->
-        <div class="mb-3">
-            <label class="form-label">
-<i class="bi bi-envelope-fill"></i> Email
-</label>
-<input type="email" class="form-control" name="email" placeholder="Enter your University Email" required>
-        </div>
+    <!-- Center Wrapper -->
+    <div class="page-wrapper">
 
-        <!-- Phone -->
-        <div class="mb-3">
-            <label class="form-label">
-<i class="bi bi-telephone-fill"></i> Phone Number
-</label>
-<input type="text" class="form-control" name="phone" placeholder="Enter your phone number">
-        </div>
+        <div class="signup-card">
+
+            <!-- Logo -->
+            <div class="text-center mb-3">
+                <img src="{% static 'images/COMSATS.jpeg' %}" class="logo" alt="COMSATS Logo">
+                <h4 class="text-center system-title">
+                    <i class="bi bi-person-plus-fill"></i> COMSATS Transport System
+                </h4>
+                <p class="text-muted">
+                    <i class="bi bi-pencil-square"></i> Create your account
+                </p>
+            </div>
+
+            <!-- Django Messages -->
+            {% if messages %}
+            {% for message in messages %}
+            <div class="alert alert-{{ message.tags }} alert-dismissible fade show">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+            {% endfor %}
+            {% endif %}
+
+            <form method="POST">
+                {% csrf_token %}
+
+                <!-- Username -->
+                <div class="mb-3">
+                    <label class="form-label">
+                        <i class="bi bi-person-fill"></i> Username
+                    </label>
+                    <input type="text" class="form-control" name="username" placeholder="Enter your username" required>
+                </div>
+
+                <!-- Email -->
+                <div class="mb-3">
+                    <label class="form-label">
+                        <i class="bi bi-envelope-fill"></i> Email
+                    </label>
+                    <input type="email" class="form-control" name="email" placeholder="Enter your University Email"
+                        required>
+                </div>
+
+                <!-- Phone -->
+                <div class="mb-3">
+                    <label class="form-label">
+                        <i class="bi bi-telephone-fill"></i> Phone Number
+                    </label>
+                    <input type="text" class="form-control" name="phone" placeholder="Enter your phone number">
+                </div>
 
                 <!-- Registration Number -->
-        <div class="mb-3">
-        <label class="form-label">
-<i class="bi bi-credit-card-2-front-fill"></i> Registration Number
-</label>
-<input type="text" placeholder="Registration Number (SP24-BSE-000)" class="form-control" name="reg_number" required>
+                <div class="mb-3">
+                    <label class="form-label">
+                        <i class="bi bi-credit-card-2-front-fill"></i> Registration Number
+                    </label>
+                    <input type="text" placeholder="Registration Number (SP24-BSE-000)" class="form-control"
+                        name="reg_number" required>
+                </div>
+
+                <!-- Department -->
+                <div class="mb-3">
+                    <label class="form-label">
+                        <i class="bi bi-building"></i> Department
+                    </label>
+                    <select class="form-control" name="department">
+                        <option value="">Select your department</option>
+                        <option value="SE">BSE</option>
+                        <option value="CS">CS</option>
+                        <option value="EE">EE</option>
+                        <option value="ME">ME</option>
+                        <option value="CVE">CVE</option>
+                        <option value="MS">MS</option>
+                    </select>
+                </div>
+
+                <!-- Semester -->
+                <div class="mb-3">
+                    <label class="form-label">
+                        <i class="bi bi-journal-bookmark-fill"></i> Semester
+                    </label>
+                    <input type="number" placeholder="Enter your semester" class="form-control" name="semester" min="1"
+                        max="8">
+                </div>
+
+                <!-- Route -->
+                <div class="mb-3">
+                    <label class="form-label">
+                        <i class="bi bi-signpost-split-fill"></i> Select Route
+                    </label>
+                    <select class="form-control" name="route">
+                        <option>Select Route</option>
+                        {% for route in routes %}
+                        <option value="{{route.id}}">{{route.route_name}}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <!-- Transport Card -->
+                <div class="mb-3">
+                    <label class="form-label">
+                        <i class="bi bi-card-heading"></i> Transport Card ID
+                    </label>
+                    <input type="text" placeholder="Enter your Transport Card Id" class="form-control"
+                        name="transport_card_id">
+                </div>
+
+                <!-- Password -->
+                <div class="mb-3">
+                    <label class="form-label">
+                        <i class="bi bi-lock-fill"></i> Password
+                    </label>
+                    <input type="password" class="form-control" name="password1" placeholder="Enter your password"
+                        required>
+                </div>
+
+                <!-- Confirm Password -->
+                <div class="mb-3">
+                    <label class="form-label">
+                        <i class="bi bi-shield-lock-fill"></i> Confirm Password
+                    </label>
+                    <input type="password" class="form-control" name="password2" placeholder="Confirm your password"
+                        required>
+                </div>
+
+                <!-- Button -->
+                <button type="submit" class="btn btn-primary w-100 mt-2">
+                    <i class="bi bi-person-check-fill"></i> Create Account
+                </button>
+
+            </form>
+
+            <!-- Login Redirect -->
+            <div class="text-center mt-3">
+                Already have an account?
+                <a href="{% url 'login' %}">
+                    <i class="bi bi-box-arrow-in-right"></i> Login
+                </a>
+            </div>
+
+            <!-- Footer -->
+            <div class="footer">
+                <i class="bi bi-bus-front"></i>
+                COMSATS Transport Management System © 2026
+            </div>
+
         </div>
-
-        <!-- Department -->
-        <div class="mb-3">
-        <label class="form-label">
-<i class="bi bi-building"></i> Department
-</label>
-        <select class="form-control" name="department">
-        <option value="">Select your department</option>
-        <option value="SE">BSE</option>
-        <option value="CS">CS</option>
-        <option value="EE">EE</option>
-        <option value="ME">ME</option>
-        <option value="CVE">CVE</option>
-        <option value="MS">MS</option>
-        </select>
-        </div>
-
-        <!-- Semester -->
-        <div class="mb-3">
-        <label class="form-label">
-<i class="bi bi-journal-bookmark-fill"></i> Semester
-</label>
-        <input type="number" placeholder="Enter your semester" class="form-control" name="semester" min="1" max="8">
-        </div>
-
-        <!-- Route -->
-        <div class="mb-3">
-        <label class="form-label">
-<i class="bi bi-signpost-split-fill"></i> Select Route
-</label>
-        <select class="form-control" name="route">
-        <option>Select Route</option>
-        {% for route in routes %}
-        <option  value="{{route.id}}">{{route.route_name}}</option>
-        {% endfor %}
-        </select>
-        </div>
-
-        <!-- Transport Card -->
-        <div class="mb-3">
-        <label class="form-label">
-<i class="bi bi-card-heading"></i> Transport Card ID
-</label>
-        <input type="text" placeholder="Enter your Transport Card Id" class="form-control" name="transport_card_id">
-        </div>
-
-        <!-- Password -->
-        <div class="mb-3">
-            <label class="form-label">
-<i class="bi bi-lock-fill"></i> Password
-</label>
-            <input type="password" class="form-control" name="password1" placeholder="Enter your password" required>
-        </div>
-
-        <!-- Confirm Password -->
-        <div class="mb-3">
-           <label class="form-label">
-<i class="bi bi-shield-lock-fill"></i> Confirm Password
-</label>
-            <input type="password" class="form-control" name="password2" placeholder="Confirm your password" required>
-        </div>
-
-        <!-- Button -->
-        <button type="submit" class="btn btn-primary w-100 mt-2">
-<i class="bi bi-person-check-fill"></i> Create Account
-</button>
-
-    </form>
-
-    <!-- Login Redirect -->
-    <div class="text-center mt-3">
-        Already have an account?
-<a href="{% url 'login' %}">
-<i class="bi bi-box-arrow-in-right"></i> Login
-</a>
     </div>
-
-    <!-- Footer -->
-    <div class="footer">
-<i class="bi bi-bus-front"></i>
-COMSATS Transport Management System © 2026
-</div>
-
-</div>
-</div>
 </body>
+
 </html>

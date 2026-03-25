@@ -6,36 +6,30 @@
 
 <div class="dashboard-card">
 
-<form method="POST">
-{% csrf_token %}
+    <form method="POST">
+        {% csrf_token %}
 
-<div class="mb-3">
+        <div class="mb-3">
 
-<label>Bus Number</label>
+            <label>Bus Number</label>
 
-<input type="text"
-name="bus_number"
-value="{{ bus.bus_number }}"
-class="form-control">
+            <input type="text" name="bus_number" value="{{ bus.bus_number }}" class="form-control">
 
-</div>
+        </div>
 
-<div class="mb-3">
+        <div class="mb-3">
 
-<label>Capacity</label>
+            <label>Capacity</label>
 
-<input type="number"
-name="capacity"
-value="{{ bus.capacity }}"
-class="form-control">
+            <input type="number" name="capacity" value="{{ bus.capacity }}" class="form-control">
 
-</div>
+        </div>
 
-<button class="btn btn-primary">
-Update Bus
-</button>
+        <button class="btn btn-primary">
+            Update Bus
+        </button>
 
-</form>
+    </form>
 
 </div>
 

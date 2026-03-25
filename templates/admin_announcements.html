@@ -3,57 +3,57 @@
 {% block content %}
 
 <div class="d-flex justify-content-between mb-3">
-<h4>Announcement Management</h4>
+    <h4>Announcement Management</h4>
 
-<a href="{% url 'add_announcement' %}" class="btn btn-primary">
-<i class="bi bi-plus-circle"></i> Add Announcement
-</a>
+    <a href="{% url 'add_announcement' %}" class="btn btn-primary">
+        <i class="bi bi-plus-circle"></i> Add Announcement
+    </a>
 
 </div>
 
 <div class="dashboard-card">
 
-<table class="table">
+    <table class="table">
 
-<thead>
-<tr>
-<th>Announcement Title</th>
-<th>Date Created</th>
-<th>Date Expiry</th>
-<th>Description</th>
-</tr>
-</thead>
+        <thead>
+            <tr>
+                <th>Announcement Title</th>
+                <th>Date Created</th>
+                <th>Date Expiry</th>
+                <th>Description</th>
+            </tr>
+        </thead>
 
-<tbody>
+        <tbody>
 
-{% for announcement in announcements %}
+            {% for announcement in announcements %}
 
-<tr>
+            <tr>
 
-<td>{{ announcement.title }}</td>
-<td>{{ announcement.created_at }}</td>
-<td>{{ announcement.expiry_date }}</td>
-<td>{{ announcement.message }}</td>
+                <td>{{ announcement.title }}</td>
+                <td>{{ announcement.created_at }}</td>
+                <td>{{ announcement.expiry_date }}</td>
+                <td>{{ announcement.message }}</td>
 
-<td>
+                <td>
 
-<a href="{% url 'edit_announcement' announcement.id %}" class="btn btn-warning btn-sm">
-<i class="bi bi-pencil"></i>
-</a>
+                    <a href="{% url 'edit_announcement' announcement.id %}" class="btn btn-warning btn-sm">
+                        <i class="bi bi-pencil"></i>
+                    </a>
 
-<a href="{% url 'delete_announcement' announcement.id %}" class="btn btn-danger btn-sm">
-<i class="bi bi-trash"></i>
-</a>
+                    <a href="{% url 'delete_announcement' announcement.id %}" class="btn btn-danger btn-sm">
+                        <i class="bi bi-trash"></i>
+                    </a>
 
-</td>
+                </td>
 
-</tr>
+            </tr>
 
-{% endfor %}
+            {% endfor %}
 
-</tbody>
+        </tbody>
 
-</table>
+    </table>
 
 </div>
 
