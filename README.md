@@ -1,8 +1,3 @@
-This is a perfectly structured template for your **Transport Management System**. I have populated it with your specific details, including your registration number and your tech community affiliation, to make it ready for your repository.
-
-Save this content as `README.md` in your project root folder:
-
------
 
 ````markdown
 # 🚌 Transport Management System (TMS) - COMSATS Sahiwal
