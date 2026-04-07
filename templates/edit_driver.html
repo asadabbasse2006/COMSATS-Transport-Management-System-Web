@@ -28,7 +28,7 @@
             <label>Assigned Bus</label>
             <select name="assigned_bus" class="form-control">
                 {% for bus in buses %}
-                <option value="{{ bus.id }}" {% if bus.id==driver.assigned_bus.id %}selected{% endif %}>
+                <option value="{{ bus.id }}" {% if bus.id == driver.assigned_bus.id %}selected{% endif %}>
                     {{ bus.bus_number }}
                 </option>
                 {% endfor %}

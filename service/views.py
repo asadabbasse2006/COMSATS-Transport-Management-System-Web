@@ -31,7 +31,7 @@ def forgot_password(request):
             send_mail(
                 "Password Reset OTP",
                 f"Your OTP is: {otp}",
-                "asadse2006@gmail.com",
+                "abbas1478179@gmail.com",
                 [email],
                 fail_silently=False
             )
@@ -77,13 +77,25 @@ def new_password(request):
 
 
 def email(receiver):
-    send_mail(
-        'Login Alert',
-        'You have logged in successfully',
-        settings.EMAIL_HOST_USER,
-        [receiver],
-        fail_silently=False,
+    subject = "Login Notification"
 
+    message = (
+        "Dear User,\n\n"
+        "We would like to inform you that your account has been successfully logged in.\n\n"
+        "If this activity was not performed by you, please secure your account immediately.\n\n"
+        "Best regards,\n"
+        "Your Support Team"
+    )
+
+    from_email = settings.EMAIL_HOST_USER
+    recipient_list = [receiver]
+
+    send_mail(
+        subject=subject,
+        message=message,
+        from_email=from_email,
+        recipient_list=recipient_list,
+        fail_silently=False,
     )
 
 def signUpEmail(receiver):

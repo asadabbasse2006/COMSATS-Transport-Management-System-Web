@@ -28,7 +28,7 @@
             <select name="batch" class="form-select">
                 <option value="">All Batches</option>
                 {% for b in batch_list %}
-                <option value="{{ b }}" {% if request.GET.batch==b %}selected{% endif %}>
+                <option value="{{ b }}" {% if request.GET.batch == b %}selected{% endif %}>
                     {{ b }}
                 </option>
                 {% endfor %}
@@ -40,10 +40,12 @@
             <select name="route" class="form-select">
                 <option value="">All Routes</option>
                 {% for route in routes %}
-                <option value="{{ route.id }}" {% if request.GET.route==route.id|stringformat:"s" %}selected{% endif %}>
-                    {{ route.name }}
-                </option>
-                {% endfor %}
+    {% with route_id=route.id|stringformat:"s" %}
+    <option value="{{ route.id }}" {% if request.GET.route == route_id %}selected{% endif %}>
+        {{ route.name }}
+    </option>
+    {% endwith %}
+{% endfor %}
             </select>
         </div>
 
