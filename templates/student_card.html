@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Student Card</title>
+
+    <style>
+        body {
+            font-family: Arial;
+            background: #f4f6f9;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .card {
+            width: 350px;
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0px 5px 15px rgba(0,0,0,0.2);
+            text-align: center;
+        }
+
+        .title {
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .status {
+            padding: 8px;
+            border-radius: 10px;
+            margin-top: 10px;
+            font-weight: bold;
+        }
+
+        .valid {
+            background: #d4edda;
+            color: green;
+        }
+
+        .expired {
+            background: #f8d7da;
+            color: red;
+        }
+
+        img {
+            margin-top: 15px;
+            width: 120px;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="card">
+
+    <div class="title">Student Transport Card</div>
+
+    <!-- Correct fields -->
+    <p><strong>Name:</strong> {{ student.user.username }}</p>
+    <p><strong>Reg No:</strong> {{ student.reg_number }}</p>
+    <p><strong>Department:</strong> {{ student.department }}</p>
+    <p><strong>Semester:</strong> {{ student.semester }}</p>
+
+    <!-- Route -->
+    <p><strong>Route:</strong> {{ student.route }}</p>
+
+    <!-- Expiry -->
+    <p><strong>Expiry:</strong> {{ student.expiry_date }}</p>
+
+    <!-- Status -->
+    {% if is_expired %}
+        <div class="status expired">Expired</div>
+    {% else %}
+        <div class="status valid">Valid</div>
+    {% endif %}
+
+    <!-- QR -->
+    {% if student.qr_code %}
+        <img src="{{ student.qr_code.url }}" alt="QR Code">
+    {% endif %}
+
+</div>
+
+</body>
+</html>

@@ -55,18 +55,61 @@ class AccountProfile(models.Model):
 # -----------------------------
 # Student Model
 # -----------------------------
+from django.db import models
+from django.contrib.auth.models import User
+from django.utils import timezone
+from django.urls import reverse
+import qrcode
+from io import BytesIO
+from django.core.files import File
+from datetime import date
+
+
 class Student(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
+
     reg_number = models.CharField(max_length=20, unique=True)
     department = models.CharField(max_length=100)
-    semester = models.IntegerField(default=False)
-    route = models.ForeignKey(Route, on_delete=models.SET_NULL, null=True)
+    semester = models.IntegerField(default=1)
+
+    route = models.ForeignKey('Route', on_delete=models.SET_NULL, null=True)
+
     transport_card_id = models.CharField(max_length=20, unique=True)
     fee_status = models.CharField(max_length=20)
     is_active = models.BooleanField(default=True)
 
+    # ✅ NEW FIELDS
+    expiry_date = models.DateField(default=timezone.now)
+    qr_code = models.ImageField(upload_to='qr_codes/', blank=True, null=True)
+
     def __str__(self):
         return f"{self.user.username} ({self.reg_number})"
+
+    # ✅ Check if card expired
+    def is_expired(self):
+        return self.expiry_date < date.today()
+
+    # ✅ Auto-generate QR code
+    def save(self, *args, **kwargs):
+        creating = self.pk is None
+        super().save(*args, **kwargs)
+
+        if creating and not self.qr_code:
+            qr_data = f"http://127.0.0.1:8000/student/{self.id}/"
+
+            qr = qrcode.make(qr_data)
+
+            buffer = BytesIO()
+            qr.save(buffer, format='PNG')
+            buffer.seek(0)
+
+            self.qr_code.save(
+                f"{self.transport_card_id}.png",
+                File(buffer),
+                save=False
+            )
+
+            super().save(update_fields=['qr_code'])
 
 
 # -----------------------------

@@ -1,15 +1,15 @@
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.models import User
 from django.shortcuts import render, redirect
 from django.http import HttpResponse,HttpResponseBadRequest
 from django.contrib import messages
 from django.contrib.auth import authenticate, login,logout
 import re
 from datetime import date
-from django.core.mail import send_mail
 from job_portal import settings
-from service.models import Route, AccountProfile, Student,Announcement,Bus,Driver,Attendance,Driver
+from service.models import Route, AccountProfile, Student,Announcement,Bus,Attendance,Driver
 from service.forms import ProfileEditForm
+from django.db import models
+from django.utils import timezone
 
 import random
 
@@ -18,10 +18,10 @@ def generate_otp():
 
 def forgot_password(request):
     if request.method == "POST":
-        email = request.POST.get('email')
+        mail = request.POST.get('email')
 
         try:
-            user = User.objects.get(email=email)
+            user = User.objects.get(email=mail)
             profile = AccountProfile.objects.get(user=user)
 
             otp = generate_otp()
@@ -32,11 +32,11 @@ def forgot_password(request):
                 "Password Reset OTP",
                 f"Your OTP is: {otp}",
                 "abbas1478179@gmail.com",
-                [email],
+                [mail],
                 fail_silently=False
             )
 
-            request.session['reset_email'] = email
+            request.session['reset_email'] = mail
             return redirect('verify_otp')
 
         except:
@@ -48,9 +48,9 @@ def verify_otp(request):
 
     if request.method == "POST":
         otp = request.POST.get('otp')
-        email = request.session.get('reset_email')
+        mail = request.session.get('reset_email')
 
-        user = User.objects.get(email=email)
+        user = User.objects.get(email=mail)
         profile = AccountProfile.objects.get(user=user)
 
         if profile.otp == otp:
@@ -65,9 +65,9 @@ def new_password(request):
 
     if request.method == "POST":
         password = request.POST.get('password')
-        email = request.session.get('reset_email')
+        mail = request.session.get('reset_email')
 
-        user = User.objects.get(email=email)
+        user = User.objects.get(email=mail)
         user.set_password(password)
         user.save()
 
@@ -106,6 +106,7 @@ def signUpEmail(receiver):
         [receiver],
         fail_silently=False
     )
+
 def login_view(request):
 
     if request.method == "POST":
@@ -115,60 +116,50 @@ def login_view(request):
 
         user = authenticate(request, username=username, password=password)
 
-        if user is not None:
+        if user is None:
+            messages.error(request, "Invalid username or password.")
+            return redirect("login")
 
-            if not user.is_active:
-                return HttpResponseBadRequest("Account is inactive")
+        if not user.is_active:
+            messages.warning(request, "Account is inactive.")
+            return redirect("login")
 
-            profile = AccountProfile.objects.filter(user=user).first()
-            email_receiver = user.email
-            email(email_receiver)
-            if profile is None:
-                return HttpResponseBadRequest("User profile not found")
+        login(request, user)
 
-            login(request, user)
+        profile = AccountProfile.objects.filter(user=user).first()
 
-            role = request.POST.get('role')
+        if profile is None:
+            messages.error(request, "User profile not found")
+            return redirect("login")
 
-            if role == "admin":
-                return redirect("admin_dashboard")
+        role = profile.role
 
-            elif role == "student":
-                return redirect("student_dashboard")
+        if role == "admin":
+            return redirect("admin_dashboard")
 
-            elif role == "driver":
-                return redirect("driver_dashboard")
+        elif role == "driver":
+            return redirect("driver_dashboard")
 
-            else:
-                return HttpResponseBadRequest("Invalid role")
+        elif role == "student":
+
+            student = Student.objects.filter(user=user).first()
+
+            if not student:
+                messages.error(request, "Student record not found")
+                return redirect("login")
+
+            if student.fee_status != "Paid":
+                messages.error(request, "Please pay your transport fee first.")
+                return redirect("login")
+
+            return redirect("student_dashboard")
 
         else:
-            return HttpResponseBadRequest("Invalid username or password")
+            messages.error(request, "Invalid role")
+            return redirect("login")
 
     return render(request, "login.html")
 
-@login_required
-def manager_dashboard(request):
-
-    routes_count = Route.objects.count()
-    buses_count = Bus.objects.count()
-    drivers_count = Driver.objects.count()
-    students_count = Student.objects.count()
-
-    complaints = Complaint.objects.all().order_by("-complaint_date")[:5]
-
-    announcements = Announcement.objects.all().order_by("-date")[:5]
-
-    context = {
-        "routes_count": routes_count,
-        "buses_count": buses_count,
-        "drivers_count": drivers_count,
-        "students_count": students_count,
-        "complaints": complaints,
-        "announcements": announcements
-    }
-
-    return render(request,"manager_dashboard.html",context)
 @login_required
 def driver_dashboard(request):
 
@@ -241,6 +232,16 @@ def admin_dashboard(request):
     }
 
     return render(request,"admin_dashboard.html",context)
+
+def student_card(request, card_id):
+    student = get_object_or_404(Student, transport_card_id=card_id)
+
+    is_expired = student.expiry_date < date.today()
+
+    return render(request, 'student_card.html', {
+        'student': student,
+        'is_expired': is_expired
+    })
 
 def admin_students(request):
     students = Student.objects.all().order_by('reg_number')
@@ -322,14 +323,14 @@ def add_announcement(request):
         audience = request.POST.get("audience")
         expiry = request.POST.get("expiry_date")
 
-        announcement = Announcement.objects.create(
+        Announcement.objects.create(
             title=title,
             message=message,
             audience=audience,
             expiry_date=expiry if expiry else None
         )
 
-        # 🔥 Send email automatically
+        # Send email automatically
         send_announcement_email(title, message)
 
         return redirect('admin_announcements')
@@ -356,7 +357,7 @@ def edit_announcement(request, id):
         "announcement": announcement
     })
 
-def update_complaint_status(request, id, status):
+def update_complaint_status(id, status):
     complaint = Complaint.objects.get(id=id)
     complaint.status = status
     complaint.save()
@@ -364,7 +365,7 @@ def update_complaint_status(request, id, status):
 
 from django.shortcuts import get_object_or_404
 
-def delete_announcement(request, id):
+def delete_announcement(id):
 
     announcement = get_object_or_404(Announcement, id=id)
 
@@ -373,7 +374,6 @@ def delete_announcement(request, id):
     return redirect('admin_announcement')
 
 from django.core.mail import send_mail
-from django.contrib.auth.models import User
 
 def send_announcement_email(title, message):
 
@@ -389,7 +389,7 @@ def send_announcement_email(title, message):
         fail_silently=True
     )
 
-def delete_bus(request,id):
+def delete_bus(id):
     bus = Bus.objects.get(id=id)
     bus.delete()
     return redirect('admin_buses')
@@ -405,7 +405,6 @@ def admin_attendance(request):
 
 
 def admin_complaints(request):
-    complaints = Complaint.objects.all()
     complaints = Complaint.objects.all()
     return render(request, "admin_complaints.html", {"complaints": complaints})
 
@@ -446,8 +445,9 @@ def edit_student(request, id):
 
     return render(request, "edit_student.html", context)
 
-def add_student(request):
+from django.contrib.auth.models import User
 
+def add_student(request):
     routes = Route.objects.all()
 
     if request.method == "POST":
@@ -457,11 +457,18 @@ def add_student(request):
 
         route = Route.objects.get(id=route_id)
 
-        # create user automatically
-        user = User.objects.create_user(
-            username=reg,
-            password="123456"
-        )
+        # ✅ Check user first
+        user = User.objects.filter(username=reg).first()
+
+        if not user:
+            user = User.objects.create_user(
+                username=reg,
+                password="123456"
+            )
+
+        # prevent duplicate student too
+        if Student.objects.filter(reg_number=reg).exists():
+            return redirect('admin_students')
 
         Student.objects.create(
             user=user,
@@ -539,7 +546,7 @@ def edit_driver(request, id):
     })
 
 
-def delete_driver(request, id):
+def delete_driver(id):
 
     driver = get_object_or_404(Driver, id=id)
 
@@ -573,7 +580,7 @@ def add_bus(request):
         return redirect('admin_buses')
     return render(request, "add_bus.html", {"routes": routes})
 
-def delete_student(request, id):
+def delete_student(id):
 
     student = Student.objects.get(id=id)
     student.delete()
@@ -581,20 +588,33 @@ def delete_student(request, id):
     return redirect("admin_students")
 
 from .models import Complaint
-def student_dashboard(request):
-    profile = AccountProfile.objects.get(user=request.user)
 
-    if profile.role != "student":
+
+@login_required
+def student_dashboard(request):
+
+    profile = AccountProfile.objects.filter(user=request.user).first()
+
+    if not profile or profile.role != "student":
         return HttpResponseBadRequest("Access denied")
 
-    student = Student.objects.get(user=request.user)
-    route = student.route
-    announcements = Announcement.objects.all()
+    student = Student.objects.select_related("route", "user").filter(user=request.user).first()
 
-    # Safe bus fetch
+    if not student:
+        return HttpResponseBadRequest("Student not found")
+
+    route = student.route
+
+    announcements = Announcement.objects.filter(
+        is_active=True
+    ).filter(
+        models.Q(audience="all") | models.Q(audience="student")
+    ).filter(
+        models.Q(expiry_date__isnull=True) | models.Q(expiry_date__gt=timezone.now())
+    )
+
     bus = Bus.objects.filter(route=route).first()
 
-    # ✅ Correct attendance
     attendance = Attendance.objects.filter(student=student)
 
     total_rides = attendance.count()
@@ -603,8 +623,7 @@ def student_dashboard(request):
 
     per = (present_rides / total_rides * 100) if total_rides > 0 else 0
 
-    # Driver
-    driver = Driver.objects.filter(assigned_bus=bus).first()
+    driver = Driver.objects.filter(assigned_bus=bus).first() if bus else None
     driver_name = driver.user.get_full_name() if driver else "Not Assigned"
 
     # Complaint system
@@ -621,9 +640,9 @@ def student_dashboard(request):
                 status="pending"
             )
 
+            messages.success(request, "Complaint submitted successfully")
             return redirect("student_dashboard")
 
-    # ✅ Fixed ordering
     complaints = Complaint.objects.filter(student=student).order_by("-id")
 
     context = {
@@ -684,7 +703,7 @@ def signup_view(request):
     if request.method == "POST":
 
         username = request.POST.get("username")
-        email = request.POST.get("email")
+        mail = request.POST.get("email")
         phone = request.POST.get("phone")
 
         password1 = request.POST.get("password1")
@@ -704,7 +723,7 @@ def signup_view(request):
         # Email validation
         pattern_email = r'^(sp|fa)2[3-6]-(bse|cs|me|cve|ee|ms)-[0-9]{3}@students\.cuisahiwal\.edu\.pk$'
         pattern_reg = r'^(SP|FA)2[3-6]-(BSE|CS|ME|CVE|EE|MS)-[0-9]{3}$'
-        if not re.match(pattern_email, email):
+        if not re.match(pattern_email, mail):
             messages.error(request, "Please enter a valid COMSATS email")
             return redirect("signup")
         if not re.match(pattern_reg, reg_number):
@@ -714,12 +733,12 @@ def signup_view(request):
         # Create Django User
         user = User.objects.create_user(
             username=username,
-            email=email,
+            email=mail,
             password=password1,
             is_active=False  # Admin approval required
         )
 
-        signUpEmail(email)
+        signUpEmail(mail)
 
         # Create Account Profile
         AccountProfile.objects.create(
@@ -749,8 +768,3 @@ def signup_view(request):
     return render(request, "signup.html", {
         "routes": routes
     })
-
-
-def hi(request):
-    routes = Route.objects.all()
-    return HttpResponse(routes)

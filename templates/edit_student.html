@@ -16,45 +16,35 @@
 
         <div class="mb-3">
             <label>Registration Number</label>
-
             <input type="text" name="reg" value="{{ student.reg_number }}" class="form-control">
-
         </div>
 
         <div class="mb-3">
             <label>Route</label>
-
             <select name="route" class="form-control">
 
                 {% for r in routes %}
-
-                <option value="{{ r.id }}" {% if r.id==student.route.id %}selected{% endif %}>
-
-                    {{ r.route_name }}
-
-                </option>
-
+                    <option value="{{ r.id }}" {% if r.id == student.route.id %}selected{% endif %}>
+                        {{ r.route_name }}
+                    </option>
                 {% endfor %}
 
             </select>
-
         </div>
 
         <div class="mb-3">
             <label>Fee Status</label>
-
             <select name="fee_status" class="form-control">
 
-                <option value="Paid" {% if student.fee_status=="Paid" %}selected{% endif %}>
+                <option value="Paid" {% if student.fee_status == "Paid" %}selected{% endif %}>
                     Paid
                 </option>
 
-                <option value="Unpaid" {% if student.fee_status=="Unpaid" %}selected{% endif %}>
+                <option value="Unpaid" {% if student.fee_status == "Unpaid" %}selected{% endif %}>
                     Unpaid
                 </option>
 
             </select>
-
         </div>
 
         <button class="btn btn-primary">
