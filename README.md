@@ -181,12 +181,6 @@ python manage.py runserver
 
 ---
 
-## 🧪 Testing Credentials (Optional)
-
-> Add demo credentials here if needed for reviewers
-
----
-
 ## 🤝 Contributing
 
 1. Fork the repository
