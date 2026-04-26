@@ -1,5 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
+import qrcode
+
 
 
 # -----------------------------
@@ -58,8 +60,7 @@ class AccountProfile(models.Model):
 from django.db import models
 from django.contrib.auth.models import User
 from django.utils import timezone
-from django.urls import reverse
-import qrcode
+
 from io import BytesIO
 from django.core.files import File
 from datetime import date

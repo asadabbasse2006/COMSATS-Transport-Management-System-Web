@@ -176,7 +176,7 @@ def driver_dashboard(request):
     announcements = Announcement.objects.all()
 
     profile = AccountProfile.objects.get(user=request.user)
-    phone = profile.phone_number if profile else None
+    phone = profile.phone_number
 
     if request.method == "POST":
 
@@ -206,6 +206,7 @@ def driver_dashboard(request):
     present_today = today_attendance.count()
 
     context = {
+        "profile": profile,
         "driver": driver,
         "bus": bus,
         "route": route,
@@ -388,6 +389,8 @@ def send_announcement_email(title, message):
         recipient_list=emails,
         fail_silently=True
     )
+def check(request):
+    return HttpResponse(request,'Hello World')
 
 def delete_bus(id):
     bus = Bus.objects.get(id=id)
@@ -670,7 +673,7 @@ def logout_view(request):
     return redirect('login')
 
 def notifications_view(request):
-    announcements = Announcement.objects.all().order_by('-date')
+    announcements = Announcement.objects.all().order_by('-created_at')
 
     return render(request, "notifications.html", {
         "announcements": announcements
