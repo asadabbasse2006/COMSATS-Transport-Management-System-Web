@@ -11,7 +11,7 @@ SECRET_KEY = os.environ.get(
     'django-insecure-dev-key'
 )
 
-DEBUG = os.environ.get('DEBUG', 'True') == 'True'
+DEBUG = os.environ.get('DEBUG', 'False') == 'True'
 
 ALLOWED_HOSTS = [
     '.onrender.com',
@@ -69,6 +69,9 @@ TEMPLATES = [
     },
 ]
 
+CSRF_TRUSTED_ORIGINS = [
+    "https://*.onrender.com",
+]
 
 WSGI_APPLICATION = 'job_portal.wsgi.application'
 
